@@ -6,4 +6,4 @@ CORS(app)
 
 @app.route("/test")
 def hello_world():
-    return jsonify("Backend is Running!")
+    return jsonify("Success")
