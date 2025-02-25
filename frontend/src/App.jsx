@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import '@mantine/core/styles.css';
+import { MantineProvider } from '@mantine/core';
+import { Card, Overlay, Text } from '@mantine/core';
+import classes from './ImageActionBanner.module.css';
 
 function App() {
   const [test, setTest] = useState(); // Contains response from backend
@@ -15,25 +17,19 @@ function App() {
   }, [])
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
+    <MantineProvider>
       <h1>Backend Communication: {test}</h1>
-      <div className="card">
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+      <Card radius="md" className={classes.card}>
+      <Overlay className={classes.overlay} opacity={0.55} zIndex={0} />
+
+      <div className={classes.content}>
+        <Text size="lg" fw={700} className={classes.title}>
+          This is a Mantine UI Component
+        </Text>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </Card>
+    </MantineProvider>
   )
 }
 
