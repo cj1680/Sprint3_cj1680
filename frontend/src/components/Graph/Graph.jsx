@@ -1,17 +1,46 @@
-import { useState, useEffect } from 'react';
-import './Graph.css'
+import './Graph.css';
+import React, { useState } from 'react';
+import { FileButton, Button } from '@mantine/core';
 
 export default function Graph() {
-    const [test, setTest] = useState(); // Contains response from backend
+  const [image, setImage] = useState();
+  const [response, setResponse] = useState()
 
-    useEffect(() => { // Runs when the site is loaded
-        fetch('http://localhost:5000/graph/') // Tests backend communication
-        .then(response => response.json())
-        .then(data => setTest(data))
-        .catch(error => setTest('Failure'));
-    }, [])
 
-    return(
-        <h1>Graph: {test}</h1>
-    );
+  const handleImageChange = async (file) => {
+    if (file) {
+      const objectURL = URL.createObjectURL(file);
+      setImage(objectURL);
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      try {
+        const response = await fetch(`http://localhost:5000/graph/`, {
+          method: "POST",
+          body: formData
+        });
+        const data = await response.json();
+        setResponse(data.response);
+      } catch (error) {
+        setResponse('Failure');
+      }
+
+    } else {
+      console.error('No file selected');
+    }
+  };
+
+  return (
+    <>
+      <div>
+        <h1>Graph:</h1>
+        <FileButton onChange={handleImageChange} accept="image/png,image/jpeg">
+            {(props) => <Button {...props}>Upload image</Button>}
+        </FileButton>
+      </div>
+      <img src={image}></img>
+      <p>{response}</p>
+    </>
+  );
 }

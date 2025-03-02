@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import './App.css'
 import '@mantine/core/styles.css';
 import { MantineProvider } from '@mantine/core';
@@ -8,31 +8,26 @@ import Geometry from '../Geometry/Geometry.jsx';
 import Algebra from '../Algebra/Algebra.jsx';
 
 export default function App() {
-  const [test, setTest] = useState(); // Contains response from backend
-  const [activeTab, setActiveTab] = useState(); // Gives state changes for menu
-
-  useEffect(() => { // Runs when the site is loaded
-    fetch('http://localhost:5000/test/') // Tests backend communication
-      .then(response => response.json())
-      .then(data => setTest(data))
-      .catch(error => setTest('Failure'));
-
-  }, [])
+  const [activeTab, setActiveTab] = useState();
 
   return (
-    <MantineProvider>
-      <h1>Backend Communication: {test}</h1>
-      <Tabs value={activeTab} onChange={setActiveTab}>
-      <Tabs.List>
-        <Tabs.Tab value="graph">Graphs</Tabs.Tab>
-        <Tabs.Tab value="geometry">Geometry</Tabs.Tab>
-        <Tabs.Tab value="algebra">Algebra</Tabs.Tab>
-      </Tabs.List>
-    </Tabs>
-
-      {activeTab === "graph" && <Graph />}
-      {activeTab === "geometry" && <Geometry />}
-      {activeTab === "algebra" && <Algebra />}
-    </MantineProvider>
+    <>
+      <MantineProvider>
+      <div>
+        <Tabs value={activeTab} onChange={setActiveTab}>
+          <Tabs.List justify="center">
+            <Tabs.Tab value="graph">Graphs</Tabs.Tab>
+            <Tabs.Tab value="geometry">Geometry</Tabs.Tab>
+            <Tabs.Tab value="algebra">Algebra</Tabs.Tab>
+          </Tabs.List>
+        </Tabs>
+      </div>
+        <div>
+          {activeTab === "graph" && <Graph />}
+          {activeTab === "geometry" && <Geometry />}
+          {activeTab === "algebra" && <Algebra />}
+        </div>
+      </MantineProvider>
+    </>
   )
 }
