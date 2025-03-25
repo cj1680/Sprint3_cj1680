@@ -33,8 +33,8 @@ export default function Graph() {
 
   return (
     <>
-      <div>
-        <h1>Graph:</h1>
+      <h2>Graph:</h2>
+      <div className='butt'>
         <FileButton onChange={handleImageChange} accept="image/png,image/jpeg">
             {(props) => <Button {...props}>Upload image</Button>}
         </FileButton>

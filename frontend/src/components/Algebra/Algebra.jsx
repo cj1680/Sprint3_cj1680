@@ -33,8 +33,8 @@ export default function Algebra() {
 
   return (
     <>
-      <div>
-        <h1>Algebra:</h1>
+      <h2>Algebra:</h2>
+      <div className='butt'>
         <FileButton onChange={handleImageChange} accept="image/png,image/jpeg">
             {(props) => <Button {...props}>Upload image</Button>}
         </FileButton>

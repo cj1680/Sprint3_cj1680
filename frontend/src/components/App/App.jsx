@@ -9,12 +9,15 @@ import Algebra from '../Algebra/Algebra.jsx';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState();
-
+ 
   return (
     <>
       <MantineProvider>
       <div>
-        <Tabs value={activeTab} onChange={setActiveTab}>
+          <h1>MATHSTER</h1>
+        </div>
+      <div className='tab'>
+        <Tabs value={activeTab} onChange={setActiveTab} allowTabDeactivation >
           <Tabs.List justify="center">
             <Tabs.Tab value="graph">Graphs</Tabs.Tab>
             <Tabs.Tab value="geometry">Geometry</Tabs.Tab>
