@@ -1,5 +1,5 @@
 from flask import Flask
-from app.routes import graph_route, geometry_route, algebra_route
+from app.routes import graph_route, geometry_route, algebra_route, login, register, startup
 
 def create_app():
     app = Flask(__name__)
@@ -8,5 +8,8 @@ def create_app():
     app.register_blueprint(graph_route.bp)
     app.register_blueprint(geometry_route.bp)
     app.register_blueprint(algebra_route.bp)
+    app.register_blueprint(login.bp)
+    app.register_blueprint(register.bp)
+    app.register_blueprint(startup.bp)
 
     return app
