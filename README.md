@@ -6,3 +6,4 @@
 - Julian Ondrey
 - Stell Shuman-Thomas
 - Tyler Snow
+- Akeel Hanchard

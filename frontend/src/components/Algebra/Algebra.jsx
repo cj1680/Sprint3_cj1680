@@ -16,7 +16,7 @@ export default function Algebra() {
       formData.append('image', file);
 
       try {
-        const response = await fetch(`http://localhost:5000/algebra/`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/algebra/`, {
           method: "POST",
           body: formData
         });

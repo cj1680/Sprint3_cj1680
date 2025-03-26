@@ -16,7 +16,7 @@ export default function Graph() {
       formData.append('image', file);
 
       try {
-        const response = await fetch(`http://localhost:5000/graph/`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/graph/`, {
           method: "POST",
           body: formData
         });
