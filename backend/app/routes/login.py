@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 import os
 from dotenv import load_dotenv
-from werkzeug import check_password_hash
+from werkzeug.security import check_password_hash
 import psycopg2
 
 bp = Blueprint("login", __name__, url_prefix="/login")
