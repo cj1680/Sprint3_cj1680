@@ -36,7 +36,7 @@ export default function Geometry() {
        <h2>Geometry:</h2>
       <div className='butt'>
        
-        <FileButton onChange={handleImageChange} accept="image/png,image/jpeg">
+        <FileButton onChange={handleImageChange} accept="image/png,image/jpeg" style={{ backgroundColor: 'black', color: 'white' }}>
             {(props) => <Button {...props}>Upload image</Button>}
         </FileButton>
       </div>
