@@ -7,9 +7,10 @@
 - Stell Shuman-Thomas
 - Tyler Snow
 - Akeel Hanchard
+- 
 <div align="center">
 
-<img src="logo.svg" width=512>
+<img src="frontend/src/logo.svg" width=512>
 
 </div>
 
