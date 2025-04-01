@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="frontend/images/Mathster.svg" width="527" height="208.5">
+<img src="frontend/images/Mathster.svg">
 
 </div>
 
