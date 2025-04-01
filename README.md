@@ -10,7 +10,7 @@
 
 <div align="center">
 
-<img src="frontend/logo.svg" width=512>
+<img src="frontend/logo.svg">
 
 </div>
 
