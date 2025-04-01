@@ -42,7 +42,7 @@ export default function Algebra() {
             </Button>}
         </FileButton>
       </div>
-      <img src={image}></img>
+      <img src={image} style={{ marginTop: '75px' }}></img>
       <p>{response}</p>
     </>
   );
