@@ -20,7 +20,7 @@ Mathster provides text feedback as audio output for the following subjects:
 
 ## Get Started
 
-Mathster is built and deployed using Render and Netlify. To host locally, the folder [tools](/tools) provides bash scripts that include the commands to be ran to host both the [backend](/backend) and [frontend](/frontend). The repository should then be hosted on localhost:5000
+Mathster is built and deployed using [Render](https://render.com/) and [Netlify](https://netlify.com/). To host locally, the folder [tools](/tools) provides bash scripts that include the commands to be ran to host both the [backend](/backend) and [frontend](/frontend). The repository should then be hosted on localhost:5000
 
 
 ## Authors
