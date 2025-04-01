@@ -52,7 +52,7 @@ $ npm run dev
 
 ### Diagrams
 
-| ![Image 1](frontend/images/STACK.png) | ![Image 2](frontend/images/UML.svg) |
+| ![Image 1](frontend/images/STACK.png) | ![Image 2](frontend/images/USE.svg) |
 |--------------------------------|--------------------------------|
 
 
