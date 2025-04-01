@@ -6,7 +6,7 @@
 
 </div>
 
-## TL;DR
+## Purpose
 
 Mathster is a product designed for blind algebra/geometry students who face challenges with concepts such as graphs, shapes, and equations.
 
