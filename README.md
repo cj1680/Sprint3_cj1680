@@ -1,10 +1,10 @@
-# Mathster
-
 <div align="center">
 
 <img src="frontend/logo.svg">
 
 </div>
+
+# Mathster 
 
 ## Table of Contents
 
