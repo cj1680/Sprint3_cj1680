@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="frontend/logo.svg">
+<img src="frontend/logo.svg" width="527" height="208.5">
 
 </div>
 
