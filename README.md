@@ -10,7 +10,9 @@
 
 Mathster is a product designed for blind algebra/geometry students who face challenges with concepts such as graphs, shapes, and equations.
 
-# Authors
+### Features
+
+## Authors
 - Brianna Jackson
 - Connor Jonhson
 - Julian Ondrey
@@ -18,5 +20,5 @@ Mathster is a product designed for blind algebra/geometry students who face chal
 - Tyler Snow
 - Akeel Hanchard
 
-### Features
+
 
