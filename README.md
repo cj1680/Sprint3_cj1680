@@ -16,7 +16,7 @@
 
 ## TL;DR
 
-Ignite is a high-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
+Mathster is a product designed for blind algebra/geometry students who face challenges with concepts such as graphs, shapes, and equations.
 
 <div align="center">
 
