@@ -1,7 +1,5 @@
 <div align="center">
-
 <img src="frontend/images/Mathster.svg">
-
 </div>
 
 # Mathster 
