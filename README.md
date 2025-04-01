@@ -12,6 +12,10 @@ Mathster is a product designed for blind algebra/geometry students who face chal
 
 ### Features
 
+- Feature 1
+- Feature 2
+- Creature 3
+
 ## Authors
 - Brianna Jackson
 - Connor Jonhson
