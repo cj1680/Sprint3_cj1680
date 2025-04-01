@@ -20,7 +20,7 @@ Mathster provides text feedback for the following subjects:
 
 ## Get Started
 
-Mathster is built and deployed using Render and Netlify. To host locally, [this subtext](/tools)
+Mathster is built and deployed using Render and Netlify. To host locally, the folder [tools](/tools) provides bash scripts that host this repository on localhost:5000
 
 
 ## Authors
