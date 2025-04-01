@@ -12,9 +12,10 @@ Mathster is a product designed for blind algebra/geometry students who face chal
 
 ### Features
 
-- Feature 1
-- Feature 2
-- Creature 3
+Mathster provides text feedback for the following subjects: 
+- Graphs
+- Geometry
+- Algebra
 
 ## Authors
 - Brianna Jackson
