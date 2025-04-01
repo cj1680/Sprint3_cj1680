@@ -53,7 +53,8 @@ $ npm run dev
 ### Diagrams
 
 | ![Image 1](frontend/images/STACK.png) | ![Image 2](frontend/images/USE.png) |
-|--------------------------------|--------------------------------|
+|:--------------------------------:|:--------------------------------:|
+|**Stack Overview**|**Use State Diagram**|
 
 
 ### Authors
