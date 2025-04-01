@@ -1,33 +1,70 @@
-name: Deploy to Render
+name: CI/CD
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  deploy:
+  backend_flask:
+    name: Backend (Flask)
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Checkout the repository
+      - uses: actions/checkout@v3
 
-    - name: Set up Python3
-      uses: actions/setup-node@v3
-      with:
-        node-version: '14'  # Specify your Node.js version
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
 
-    - name: Install dependencies (for a Node.js app, adjust if needed)
-      run: npm install
+      # Install Python dependencies
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Build app (if using build steps, like for React, Vue, etc.)
-      run: npm run build
+      # Step 3: Lint Python code
+      - name: Lint Python code
+        run: |
+          if [ -f .flake8 ] || [ -f setup.cfg ] || [ -f tox.ini ] || [ -f .pep8 ]; then
+            flake8 .
+          else
+            echo "No lint config found, skipping linting."
+          fi
+        
+      # Step 4: Run Python tests
+      - name: Run Python tests
+        run: |
+          if [ -f pytest.ini ] || ls tests; then
+            pytest
+          else
+            echo "No tests found, skipping tests."
+          fi
 
-    - name: Deploy to Render
-      env:
-        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}  # Add this secret too
-      run: |
-        curl -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
-        -H "Authorization: Bearer $RENDER_API_KEY"
+  deploy:
+    name: Deploy & Push to Render
+    needs: [backend_flask]  # Ensure that deploy runs after backend_flask
+    runs-on: ubuntu-latest
+    environment: PROD
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          python -m venv env
+          source env/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Deploy to Render
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}  # Add this secret too
+        run: |
+          curl -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
+          -H "Authorization: Bearer $RENDER_API_KEY"
