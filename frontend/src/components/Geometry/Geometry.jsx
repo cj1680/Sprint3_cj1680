@@ -40,7 +40,7 @@ export default function Geometry() {
             {(props) => <Button {...props}>Upload image</Button>}
         </FileButton>
       </div>
-      <img src={image}></img>
+      <img src={image} style={{ marginTop: '75px' }}></img>
       <p>{response}</p>
     </>
   );
