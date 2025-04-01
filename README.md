@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="frontend/logo.svg">
+<img src="frontend/images/logo.svg">
 
 </div>
 
