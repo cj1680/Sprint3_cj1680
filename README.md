@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="frontend/logo.svg" width="527" height="208.5">
+<img src="frontend/images/logo.svg" width="527" height="208.5">
 
 </div>
 
@@ -9,10 +9,12 @@
 ## Table of Contents
 
 - [Purpose](#purpose)
-- [Features](#features)
+  - [Features](#features)
 - [Get Started](#get-started)
   - [Hosting Locally](#hosting-locally)
-- [Authors](#authors)
+- [Documentation](#documentation)
+  - [Diagrams](#diagrams)  
+  - [Authors](#authors)
 
 ## Purpose
 
@@ -46,7 +48,15 @@ $ npm install
 $ npm run dev
 ```
 
-## Authors
+## Documentation
+
+### Diagrams
+
+| ![Image 1](frontend/images/STACK.png) | ![Image 2](frontend/images/UML.svg) |
+|--------------------------------|--------------------------------|
+
+
+### Authors
 - Brianna Jackson
 - Connor Jonhson
 - Julian Ondrey
