@@ -17,6 +17,12 @@ Mathster provides text feedback for the following subjects:
 - Geometry
 - Algebra
 
+
+## Get Started
+
+Mathster is built and deployed using Render and Netlify. To host locally, [this subtext](/tools)
+
+
 ## Authors
 - Brianna Jackson
 - Connor Jonhson
