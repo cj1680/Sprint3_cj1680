@@ -1,5 +1,5 @@
 <div align="center">
-<img src="frontend/images/Mathster.svg">
+<img src="frontend/images/Mathster.svg" width="1000" height="300">
 </div>
 
 # Mathster 
