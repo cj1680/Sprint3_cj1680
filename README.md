@@ -17,9 +17,11 @@
 ## Purpose
 
 Mathster is a product designed for blind algebra/geometry students who face challenges with concepts such as graphs, shapes, and equations. Users can navigate the website with their voice and receive audio output as guidance and as feedback for their math questions.
+Mathster is a product designed for blind algebra/geometry students who face challenges with concepts such as graphs, shapes, and equations. Users can navigate the website with their voice and receive audio output as guidance and as feedback for their math questions.
 
 ### Features
 
+Mathster provides text feedback as audio output for the following subjects: 
 Mathster provides text feedback as audio output for the following subjects: 
 - Graphs
 - Geometry
