@@ -1,7 +1,5 @@
 <div align="center">
-
-<img src="frontend/logo.svg" width="527" height="208.5">
-
+<img src="frontend/images/Mathster.svg" width="1000" height="300">
 </div>
 
 # Mathster 
@@ -9,17 +7,21 @@
 ## Table of Contents
 
 - [Purpose](#purpose)
-- [Features](#features)
+  - [Features](#features)
 - [Get Started](#get-started)
   - [Hosting Locally](#hosting-locally)
-- [Authors](#authors)
+- [Documentation](#documentation)
+  - [Diagrams](#diagrams)  
+  - [Authors](#authors)
 
 ## Purpose
 
 Mathster is a product designed for blind algebra/geometry students who face challenges with concepts such as graphs, shapes, and equations. Users can navigate the website with their voice and receive audio output as guidance and as feedback for their math questions.
+Mathster is a product designed for blind algebra/geometry students who face challenges with concepts such as graphs, shapes, and equations. Users can navigate the website with their voice and receive audio output as guidance and as feedback for their math questions.
 
 ### Features
 
+Mathster provides text feedback as audio output for the following subjects: 
 Mathster provides text feedback as audio output for the following subjects: 
 - Graphs
 - Geometry
@@ -46,13 +48,21 @@ $ npm install
 $ npm run dev
 ```
 
-## Authors
+## Documentation
+
+### Diagrams
+
+| ![Image 1](frontend/images/STACK.png) | ![Image 2](frontend/images/USE.png) |
+|:--------------------------------:|:--------------------------------:|
+|**Stack Overview**|**Use State Diagram**|
+
+
+### Authors
 - Brianna Jackson
 - Connor Jonhson
 - Julian Ondrey
 - Stell Shuman-Thomas
 - Tyler Snow
 - Akeel Hanchard
-
 
 
