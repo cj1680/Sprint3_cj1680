@@ -12,6 +12,15 @@ def geometry():
         return jsonify({"error": "No image uploaded"}), 400
 
     image_file = request.files["image"]
+    filename = image_file.filename.lower()
+
+    if filename.endswith(".jpg") or filename.endswith(".jpeg"):
+        media_type = "image/jpeg"
+    elif filename.endswith(".png"):
+        media_type = "image/png"
+    else:
+        return jsonify({"error": "Unsupported image format. Only PNG and JPG are supported."}), 400
+    
 
     # Read and encode image
     image_data = base64.b64encode(image_file.read()).decode("utf-8")
@@ -25,7 +34,7 @@ def geometry():
             messages=[
                 {
                     "role": "user",
-                    "content": "Extract the shape and its properties in this format: Shape:[Name] A:[°], B:[°], C:[°], A-B:[Length]u, B-C:[Length]u, C-A:[Length]u. Use 'null' for unknown values. ONLY output the desired format"
+                    "content": "If not a geometric image, state how the file is not a geometric image. Else, extract the shape and its properties in this format: Shape:[Name] A:[°], B:[°], C:[°], A-B:[Length]u, B-C:[Length]u, C-A:[Length]u. Use 'null' for unknown values. ONLY output the desired format"
                 },
                 {
                     "role": "user",
@@ -34,7 +43,7 @@ def geometry():
                             "type": "image",
                             "source": {
                                 "type": "base64",
-                                "media_type": "image/png",
+                                "media_type": media_type,
                                 "data": image_data
                             }
                         }

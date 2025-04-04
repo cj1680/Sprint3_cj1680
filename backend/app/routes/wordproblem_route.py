@@ -4,10 +4,10 @@ import os
 from dotenv import load_dotenv
 import base64
 
-bp = Blueprint("algebra", __name__, url_prefix="/algebra")
+bp = Blueprint("wordproblem", __name__, url_prefix="/wordproblem")
 
 @bp.route("/", methods=["POST"])
-def algebra():
+def wordproblem():
     if "image" not in request.files:
         return jsonify({"error": "No image uploaded"}), 400
 
@@ -20,7 +20,7 @@ def algebra():
         media_type = "image/png"
     else:
         return jsonify({"error": "Unsupported image format. Only PNG and JPG are supported."}), 400
-
+    
     # Read and encode image
     image_data = base64.b64encode(image_file.read()).decode("utf-8")
 
@@ -28,12 +28,12 @@ def algebra():
 
     try:
         message = client.messages.create(
-            model="claude-3-5-sonnet-20240620",
+            model="claude-3-5-sonnet-20241022",
             max_tokens=300,
             messages=[
                 {
                     "role": "user",
-                    "content": "If not an image of an algebraic equation, state how the file is not an algebraic equation. Else, extract the equation from the image and output it in a fully readable text format. Use words for symbols where needed to ensure clarity for a voice generator. Output ONLY the worded equation"
+                    "content": "If not a math word problem, state how the file is not a math word problem. Else, extract the text from the image as long as it is a math word problem. Output nothing else."
                 },
                 {
                     "role": "user",
