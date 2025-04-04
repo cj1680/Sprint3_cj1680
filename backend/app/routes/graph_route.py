@@ -8,10 +8,19 @@ bp = Blueprint("graph", __name__, url_prefix="/graph")
 
 @bp.route("/", methods=["POST"])
 def graph():
+    print("testing")
     if "image" not in request.files:
         return jsonify({"error": "No image uploaded"}), 400
 
     image_file = request.files["image"]
+    filename = image_file.filename.lower()
+
+    if filename.endswith(".jpg") or filename.endswith(".jpeg"):
+        media_type = "image/jpeg"
+    elif filename.endswith(".png"):
+        media_type = "image/png"
+    else:
+        return jsonify({"error": "Unsupported image format. Only PNG and JPG are supported."}), 400
 
     # Read and encode image
     image_data = base64.b64encode(image_file.read()).decode("utf-8")
@@ -25,7 +34,7 @@ def graph():
             messages=[
                 {
                     "role": "user",
-                    "content": "Extract only the points where the line intersects the major grid lines in [x, y] format. Include all intersections, not just x- and y-intercepts. Also, describe the overall shape of the line (e.g., increasing, decreasing, U-shape, V-shape). Output nothing else."
+                    "content": "If not a graph, state how the file is not a graph. Else, extract only the points where the line intersects the major grid lines in [x, y] format. Include all intersections, not just x- and y-intercepts. Also, describe the overall shape of the line (e.g., increasing, decreasing, U-shape, V-shape). Output nothing else."
                 },
                 {
                     "role": "user",
@@ -34,7 +43,7 @@ def graph():
                             "type": "image",
                             "source": {
                                 "type": "base64",
-                                "media_type": "image/png",
+                                "media_type": media_type,
                                 "data": image_data
                             }
                         }
