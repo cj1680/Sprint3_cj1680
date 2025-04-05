@@ -1,23 +1,22 @@
 #root {
-  margin-bottom: auto;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1280px;
-  padding: 2rem;
+  margin: 0;
+  max-width: 100%;
+  padding: 0rem;
   text-align: center;
+  width: 100%;
 }
 
 .logo {
-  height: 6em;
+  height: em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #141dcbaa);
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em #381769aa);
 }
 
 @keyframes logo-spin {
@@ -36,9 +35,31 @@
 }
 
 .card {
-  padding: 2em;
+  padding: 0em;
 }
 
 .read-the-docs {
-  color: #888;
+  color: #c85353;
+}
+
+*{
+  margin: 0;
+  background-color: #f8edeb;
+  font-size: 20px;
+  padding: 0;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color: black;
+}
+.tab{
+  padding: 0em;
+  transition: color 100ms ease;
+  transform: translateY(50px);
+  z-index: 1;
+  position: relative;
+  outline: 3px solid rgb(3, 24, 22);
+  outline-offset: -px;
+}
+h1{
+  transform: translateX(-20px);
+  transform: translateY(20px);
 }

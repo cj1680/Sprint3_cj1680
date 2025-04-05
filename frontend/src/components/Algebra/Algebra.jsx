@@ -33,13 +33,16 @@ export default function Algebra() {
 
   return (
     <>
-      <div>
-        <h1>Algebra:</h1>
-        <FileButton onChange={handleImageChange} accept="image/png,image/jpeg">
-            {(props) => <Button {...props}>Upload image</Button>}
+      <h2>Algebra:</h2>
+      <div className='butt'>
+        <FileButton onChange={handleImageChange} accept="image/png,image/jpeg,image/jpg">
+            {(props) => <Button {...props} style={{ backgroundColor: 'black', color: 'white' }}
+            >
+              Upload image
+            </Button>}
         </FileButton>
       </div>
-      <img src={image}></img>
+      <img src={image} style={{ marginTop: '75px' }}></img>
       <p>{response}</p>
     </>
   );
