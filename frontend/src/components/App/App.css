@@ -55,7 +55,7 @@
   transition: color 100ms ease;
   transform: translateY(50px);
   z-index: 1;
-  color: rgba(47, 39, 88, 0.684);
+  color: rgba(5, 3, 19, 0.684);
   position: relative;
   outline: 3px solid rgb(3, 24, 22);
   outline-offset: -px;
