@@ -44,17 +44,29 @@
 
 *{
   margin: 0;
+<<<<<<< Updated upstream
   background-color: #f8edeb;
   font-size: 20px;
   padding: 0;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   color: black;
+=======
+  background-color: rgb(189, 189, 13);
+  font-size: 30px;
+  font-weight: bold;
+  padding: 0;
+  font-family: arial,veranda,'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+>>>>>>> Stashed changes
 }
 .tab{
   padding: 0em;
   transition: color 100ms ease;
   transform: translateY(50px);
   z-index: 1;
+<<<<<<< Updated upstream
+=======
+  color: rgb(99, 4, 136);
+>>>>>>> Stashed changes
   position: relative;
   outline: 3px solid rgb(3, 24, 22);
   outline-offset: -px;
@@ -62,4 +74,7 @@
 h1{
   transform: translateX(-20px);
   transform: translateY(20px);
+}
+.res{
+  transform: translateY(50px);
 }
