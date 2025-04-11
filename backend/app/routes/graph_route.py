@@ -8,7 +8,6 @@ bp = Blueprint("graph", __name__, url_prefix="/graph")
 
 @bp.route("/", methods=["POST"])
 def graph():
-    print("testing")
     if "image" not in request.files:
         return jsonify({"error": "No image uploaded"}), 400
 
