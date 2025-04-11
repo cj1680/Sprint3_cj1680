@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import '@mantine/core/styles.css';
 import { MantineProvider, Center, Tabs } from '@mantine/core';
@@ -9,13 +9,43 @@ import Algebra from '../Algebra/Algebra.jsx';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState();
-  const [signedIn, setSignedIn] = useState(false);
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const savedToken = localStorage.getItem('mathsterToken');
+      setToken(savedToken);
+      if (savedToken){
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/login_token/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ token: savedToken })
+        });
+      
+        const data = await response.json();
+        if (!data.valid) {
+          setToken('');
+          localStorage.removeItem('mathsterToken');
+        }
+      }
+    };
+  
+    checkToken();
+  }, []);
+  
+
+  const signOut = () => {
+    setToken('');
+    localStorage.setItem('mathsterToken', '');
+  }
  
   return (
     <>
       <MantineProvider>
         <div>
-          <h1>MATHSTER</h1>
+          <h1>Mathster</h1>
         </div>
         <div className='tab'>
           <Tabs value={activeTab} onChange={setActiveTab} allowTabDeactivation>
@@ -27,17 +57,17 @@ export default function App() {
                 <Tabs.Tab value="algebra">Algebra</Tabs.Tab>
               </div>
               <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-                {!signedIn ? <Tabs.Tab value="Sign In">Sign In</Tabs.Tab> : <Tabs.Tab value="Sign Out" onClick={() => {setSignedIn(false)}}>Sign Out</Tabs.Tab>}
+                {!token ? <Tabs.Tab value="Sign In">Sign In</Tabs.Tab> : <Tabs.Tab value="Sign Out" onClick={signOut}>Sign Out</Tabs.Tab>}
               </div>
             </Tabs.List>
           </Tabs>
         </div>
         <div>
-          {activeTab === "graph" && <Graph />}
-          {activeTab === "geometry" && <Geometry />}
-          {activeTab === "algebra" && <Algebra />}
+          {activeTab === "graph" && <Graph token={token} />}
+          {activeTab === "geometry" && <Geometry token={token} />}
+          {activeTab === "algebra" && <Algebra token={token} />}
         </div>
-        <Center>{activeTab === "Sign In" && !signedIn && <Auth setSignedIn={setSignedIn}/>}</Center>
+        <Center>{activeTab === "Sign In" && !token && <Auth setToken={setToken}/>}</Center>
         
       </MantineProvider>
     </>

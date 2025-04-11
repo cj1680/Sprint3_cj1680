@@ -17,11 +17,22 @@ def startup():
         
         # Create users table if it doesn't exist
         cursor.execute('''
-            CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
-                email VARCHAR(50) NOT NULL UNIQUE,
-                password VARCHAR(255) NOT NULL
-            );
+        CREATE TABLE IF NOT EXISTS users (
+            u_id SERIAL PRIMARY KEY,
+            email VARCHAR(50) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            token VARCHAR(128)
+        );
+    
+        CREATE TABLE IF NOT EXISTS conversations (
+            c_id SERIAL PRIMARY KEY,
+            u_id_fk INTEGER NOT NULL,
+            date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            branch VARCHAR(100),
+            url VARCHAR(255),
+            conversation TEXT,
+            FOREIGN KEY (u_id_fk) REFERENCES users(u_id) ON DELETE CASCADE
+        );
         ''')
         conn.commit()
 
@@ -35,4 +46,4 @@ def startup():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(debug=True, host="0.0.0.0", port=port)
