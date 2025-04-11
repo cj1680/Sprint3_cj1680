@@ -11,7 +11,7 @@ import {
 import { useForm } from '@mantine/form';
 import { upperFirst, useToggle } from '@mantine/hooks';
 
-export default function Auth({props, setSignedIn}) {
+export default function Auth({props, setToken}) {
   const [type, toggle] = useToggle(['login', 'register']);
   const form = useForm({
     initialValues: {
@@ -40,7 +40,12 @@ export default function Auth({props, setSignedIn}) {
       const data = await response.json();
       if (response.ok) {
         alert(data.message); // Show success message
-        setSignedIn(true);
+        if (data.token) {
+          localStorage.setItem('mathsterToken', data.token);
+          setToken(data.token);
+        } else {
+          console.log('no token');
+        }
       } else {
         alert(data.error); // Show error message
       }

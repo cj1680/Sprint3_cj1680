@@ -3,6 +3,8 @@ import os
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
 import psycopg2
+import string
+import secrets
 
 bp = Blueprint("login", __name__, url_prefix="/login")
 
@@ -34,7 +36,19 @@ def login():
         # Check if password matches
         hashed_password = user[0]
         if check_password_hash(hashed_password, password):
-            return jsonify({"message": "Login successful!"}), 200
+            # Generate auth token
+            characters = string.ascii_letters + string.digits  # A-Z, a-z, 0-9
+            token = ''.join(secrets.choice(characters) for _ in range(128))
+
+            # Add login token to database
+            cursor.execute('''
+                UPDATE users 
+                SET token = %s 
+                WHERE email = %s
+            ''', (token, email))
+            conn.commit()
+
+            return jsonify({"message": "Login successful!", "token": token}), 200
         else:
             return jsonify({"error": "Invalid email or password"}), 401
 

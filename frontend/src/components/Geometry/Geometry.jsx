@@ -2,7 +2,7 @@ import './Geometry.css';
 import React, { useState } from 'react';
 import { FileButton, Button } from '@mantine/core';
 
-export default function Geometry() {
+export default function Geometry({token}) {
   const [image, setImage] = useState();
   const [response, setResponse] = useState()
 
@@ -14,6 +14,7 @@ export default function Geometry() {
 
       const formData = new FormData();
       formData.append('image', file);
+      formData.append('token', token);
 
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/geometry/`, {

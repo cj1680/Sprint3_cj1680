@@ -1,5 +1,5 @@
 from flask import Flask
-from app.routes import graph_route, geometry_route, algebra_route, wordproblem_route, login, register
+from app.routes import graph_route, geometry_route, algebra_route, wordproblem_route, login, register, login_token
 
 def create_app():
     app = Flask(__name__)
@@ -11,5 +11,6 @@ def create_app():
     app.register_blueprint(wordproblem_route.bp)
     app.register_blueprint(login.bp)
     app.register_blueprint(register.bp)
+    app.register_blueprint(login_token.bp)
 
     return app
