@@ -1,10 +1,12 @@
 import './Graph.css';
 import React, { useState } from 'react';
 import { FileButton, Button } from '@mantine/core';
+import History from '../History/History.jsx';
 
 export default function Graph({token}) {
   const [image, setImage] = useState();
-  const [response, setResponse] = useState()
+  const [response, setResponse] = useState();
+  const [isNewChat, setIsNewChat] = useState(true);
 
 
   const handleImageChange = async (file) => {
@@ -35,13 +37,23 @@ export default function Graph({token}) {
   return (
     <>
       <h2>Graph:</h2>
-      <div className='butt'>
-        <FileButton onChange={handleImageChange} accept="image/png,image/jpeg,image/jpg" style={{ backgroundColor: 'black', color: 'white' }}>
-            {(props) => <Button {...props}>Upload image</Button>}
-        </FileButton>
-      </div>
-      <img src={image} style={{ marginTop: '75px' }}></img>
-      <p>{response}</p>
+      {isNewChat ? (
+        <>
+          <div className='butt'>
+          {token && <Button onClick={() => setIsNewChat(false)} variant="filled" color="rgba(0, 0, 0, 1)">History</Button>}
+            <FileButton onChange={handleImageChange} accept="image/png,image/jpeg,image/jpg" style={{ backgroundColor: 'black', color: 'white' }}>
+                {(props) => <Button {...props}>Upload image</Button>}
+            </FileButton>
+          </div>
+          <img src={image} style={{ marginTop: '75px' }}></img>
+          <p>{response}</p>
+        </>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative', top: '70px' }}>
+          <Button onClick={() => setIsNewChat(true)} variant="filled" color="rgba(0, 0, 0, 1)">New Chat</Button>
+          <History branch={'graph'} token={token} setIsNewChat={setIsNewChat} setImage={setImage} setResponse={setResponse}/>
+        </div>
+      )}
     </>
   );
 }
