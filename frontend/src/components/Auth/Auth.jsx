@@ -10,9 +10,16 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { upperFirst, useToggle } from '@mantine/hooks';
+import { useSpeechSynthesis } from 'react-speech-kit';
+import { useEffect, useRef } from 'react';
 
 export default function Auth({props, setToken}) {
   const [type, toggle] = useToggle(['login', 'register']);
+  const inputRef = useRef(null);
+  const signInRef = useRef(null);
+
+  const { speak } = useSpeechSynthesis();
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -27,6 +34,16 @@ export default function Auth({props, setToken}) {
     },
   });
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 50);
+  
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleSubmit = async (values) => {
     const endpoint = type === 'login' ? '/login' : '/register';
 
@@ -39,7 +56,7 @@ export default function Auth({props, setToken}) {
 
       const data = await response.json();
       if (response.ok) {
-        alert(data.message); // Show success message
+        speak({text: data.message}) // Say success message
         if (data.token) {
           localStorage.setItem('mathsterToken', data.token);
           setToken(data.token);
@@ -54,6 +71,11 @@ export default function Auth({props, setToken}) {
       alert('An error occurred. Please try again.');
     }
   };
+
+  const handleSpeak = (field) => {
+    window.speechSynthesis.cancel();
+    speak({ text: field });
+  }
 
   return (
     <Paper radius="md" pt="40px" withBorder {...props}>
@@ -71,6 +93,8 @@ export default function Auth({props, setToken}) {
             onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
             error={form.errors.email && 'Invalid email'}
             radius="md"
+            ref={inputRef}
+            onFocus={() => handleSpeak('enter an email')}
           />
 
           <PasswordInput
@@ -81,16 +105,23 @@ export default function Auth({props, setToken}) {
             onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
             error={form.errors.password && 'Password should include at least 6 characters'}
             radius="md"
+            onFocus={() => handleSpeak('enter a password. Must be at least 6 characters long')}
           />
         </Stack>
 
         <Group justify="space-between" mt="xl">
-          <Anchor component="button" type="button" c="dimmed" onClick={() => toggle()} size="xs">
-            {type === 'register'
-              ? 'Already have an account? Login'
-              : "Don't have an account? Register"}
+          <Anchor component="button" 
+            type="button" 
+            c="dimmed" 
+            onClick={() => {handleSpeak(type === 'register' ? "Don't have an account? Register" : 'Already have an account? Login'); toggle()}} 
+            size="xs"
+            onFocus={() => handleSpeak(type === 'register' ? 'Already have an account? Login' : "Don't have an account? Register")}
+            >
+              {type === 'register'
+                ? 'Already have an account? Login'
+                : "Don't have an account? Register"}
           </Anchor>
-          <Button type="submit" radius="xl" style={{ backgroundColor: 'black', color: 'white' }}>
+          <Button type="submit" radius="xl" style={{ backgroundColor: 'black', color: 'white' }} ref={signInRef} onFocus={() => handleSpeak(type)}>
             {upperFirst(type)}
           </Button>
         </Group>

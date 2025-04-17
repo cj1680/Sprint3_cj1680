@@ -14,8 +14,8 @@ def history():
     token = data.get("token")
     branch = data.get("branch")
 
-    # if not token:
-    #     return jsonify({"error": "Token required"}), 400
+    if not token:
+        return jsonify({"error": "Token required"}), 400
 
     conn = None
     cursor = None
@@ -27,7 +27,7 @@ def history():
 
         # Fetch user's previous conversation history
         cursor.execute('''
-            SELECT date, branch, url, conversation
+            SELECT filename, branch, url, conversation
             FROM conversations
             WHERE u_id_fk IN (
                 SELECT u_id

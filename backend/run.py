@@ -28,6 +28,7 @@ def startup():
             c_id SERIAL PRIMARY KEY,
             u_id_fk INTEGER NOT NULL,
             date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            filename VARCHAR(255),
             branch VARCHAR(100),
             url VARCHAR(255),
             conversation TEXT,
