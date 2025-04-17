@@ -9,10 +9,4 @@ services:
     buildCommand: /backend/$ pip install -r requirements.txt
     startCommand: gunicorn run:app
 
-  - type: cron
-    name: date
-    runtime: python
-    schedule: "* * * * *"
-    buildCommand: "true" # ensure it's a string
-    startCommand: date
 
