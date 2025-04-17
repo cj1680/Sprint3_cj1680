@@ -2,6 +2,7 @@ import './Geometry.css';
 import React, { useState } from 'react';
 import { FileButton, Button } from '@mantine/core';
 import History from '../History/History.jsx';
+import { Loader } from '@mantine/core';
 
 export default function Geometry({token}) {
   const [image, setImage] = useState();
@@ -45,6 +46,7 @@ export default function Geometry({token}) {
                 {(props) => <Button {...props}>Upload image</Button>}
             </FileButton>
           </div>
+          {loading && <Loader color="dark" size="sm" style={{ marginTop: '30px' }} />}
           <img src={image} style={{ marginTop: '75px' }}></img>
           <p>{response}</p>
         </>
