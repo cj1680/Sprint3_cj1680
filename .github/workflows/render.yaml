@@ -1,0 +1,8 @@
+services:
+  - type: web
+    plan: free
+    name: mathster
+    runtime: python
+    repo: https://github.com/cj1680/Sprint3_cj1680/backend
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn run:app"
