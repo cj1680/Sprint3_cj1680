@@ -3,6 +3,7 @@
   max-width: 100%;
   padding: 0rem;
   text-align: center;
+  background-color: ;
   width: 100%;
 }
 
@@ -52,7 +53,7 @@
 }
 .tab{
   padding: 0em;
-  transition: color 100ms ease;
+  transition:100ms ease-in;
   transform: translateY(50px);
   z-index: 1;
   color: rgba(5, 3, 19, 0.684);
@@ -63,7 +64,4 @@
 h1{
   transform: translateX(-20px);
   transform: translateY(20px);
-}
-.res{
-  transform: translateY(50px);
 }
