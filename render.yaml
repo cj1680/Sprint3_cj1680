@@ -3,6 +3,6 @@ services:
     plan: free
     name: mathster
     runtime: python
-    repo: https://github.com/cj1680/Sprint3_cj1680/backend
+    repo: https://github.com/cj1680/Sprint3_cj1680/tree/master/backend
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn run:app"
