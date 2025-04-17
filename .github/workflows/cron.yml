@@ -1,0 +1,14 @@
+name:
+  Cron
+
+on:
+  # Triggers the workflow every 5 minutes
+  schedule:
+    - cron: "*/5 * * * *"
+
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: poke
+        run: echo Hello, world!
