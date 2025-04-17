@@ -6,13 +6,11 @@ services:
     runtime: python
     name: sprint3
     repo: https://github.com/cj1680/Sprint3_cj1680 # Default: Repo containing render.yaml
-    numInstances: 1   
     region: oregon 
     plan: free   
     branch: master      
     buildCommand: /backend/$ pip install -r requirements.txt
     startCommand: gunicorn run:app
-    autoDeploy: true # Disable automatic deploys
 
   - type: cron
     name: date
