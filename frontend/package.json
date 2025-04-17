@@ -13,8 +13,10 @@
     "@mantine/core": "^7.17.0",
     "@mantine/form": "^7.17.2",
     "@mantine/hooks": "^7.17.0",
+    "focus-trap-react": "^11.0.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-speech-kit": "^3.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
