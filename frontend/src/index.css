@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: #c41d1dde;
-  background-color: #f8edeb;
+  background-color: #c2771b;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -48,7 +48,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #77788a;
+  border-color: #5258b8;
 }
 button:focus,
 button:focus-visible {
