@@ -1,10 +1,23 @@
 .butt{
     color: rgb(57, 39, 193);
-    background-color: transparent;
     transform: translateY(70px);
 }
 
 h2{
     transform: translateY(70px);
     font-size: 50px;
+}
+img{
+    padding-bottom: 50px;
+    width: 400px;
+    position: relative;
+    right: 300px;
+    transform: translateX(-100px);
+    transform: translateY(100px);
+}
+p{
+    position: absolute;
+    margin-top: -300px;
+    margin-left: 750px;
+    transform: translateY(50px);
 }
