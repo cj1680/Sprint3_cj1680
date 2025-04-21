@@ -7,8 +7,10 @@ import { Loader } from '@mantine/core';
 
 export default function Branch_Layout({token, branch}) {
   const [image, setImage] = useState();
-  const [response, setResponse] = useState();
+  const [response, setResponse] = useState('');
   const [isNewChat, setIsNewChat] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [audioOutput, setAudioOutput] = useState("");
   const inputRef = useRef(null);
 
   const { speak } = useSpeechSynthesis();
@@ -33,17 +35,25 @@ export default function Branch_Layout({token, branch}) {
       formData.append('image', file);
       formData.append('token', token);
 
+      setLoading(true);
       setResponse('');
-
+      setAudioOutput('Loading');
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/${branch.toLowerCase()}/`, {
           method: "POST",
           body: formData
         });
         const data = await response.json();
-        setResponse(data.response);
+
+        if (data.response != '0') {
+          setResponse(data.response);
+        } else {
+          setResponse('This is not a valid image')
+        }
       } catch (error) {
         setResponse('Failure');
+      } finally {
+        setLoading(false);
       }
 
     } else {
@@ -52,35 +62,47 @@ export default function Branch_Layout({token, branch}) {
   };
 
   useEffect(() => {
-    handleFocus(response);
+    handleSpeak(response);
   }, [response])
 
-  const handleFocus = (button) => {
+  useEffect(() => {
+    handleSpeak(audioOutput);
+  }, [audioOutput])
+
+  const handleSpeak = (output) => {
     window.speechSynthesis.cancel();
-    speak({ text: button });
+    speak({ text: output });
   }
 
   return (
     <>
-      <h2>{branch}:</h2>
-      {isNewChat ? (
-        <>
-          <div className='butt'>
-            <FileButton onChange={handleImageChange} accept="image/png,image/jpeg,image/jpg" style={{ backgroundColor: 'black', color: 'white' }}>
-                {(props) => <Button {...props} tabIndex={1} ref={inputRef} onFocus={() => handleFocus('upload an image')}>Upload image</Button>}
-            </FileButton>
-            {token && <Button onClick={() => setIsNewChat(false)} variant="filled" color="rgba(0, 0, 0, 1)" tabIndex={2} onFocus={() => handleFocus('previous conversation history')}>History</Button>}
+        <h2>{branch}:</h2>
+        {loading && (
+          <div className="loader-container">
+            <Loader color="black" size="xl" />
           </div>
-          {loading && <Loader color="dark" size="sm" style={{ marginTop: '30px' }} />}
-          <img src={image} style={{ marginTop: '75px' }}></img>
-          <p>{response}</p>
-        </>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative', top: '70px' }}>
-          <Button onClick={() => setIsNewChat(true)} variant="filled" color="rgba(0, 0, 0, 1)" onFocus={() => handleFocus('start a new chat')}>New Chat</Button>
-          <History branch={branch} token={token} setIsNewChat={setIsNewChat} setImage={setImage} setResponse={setResponse}/>
-        </div>
-      )}
+        )}
+        {isNewChat ? (
+          <>
+            <div className='butt'>
+              <FileButton onChange={handleImageChange} accept="image/png,image/jpeg,image/jpg" style={{ backgroundColor: 'black', color: 'white' }}>
+                  {(props) => <Button {...props} tabIndex={1} ref={inputRef} onFocus={() => handleSpeak('upload an image')}>Upload image</Button>}
+              </FileButton>
+              {token && <Button onClick={() => setIsNewChat(false)} variant="filled" color="rgba(0, 0, 0, 1)" tabIndex={2} onFocus={() => handleSpeak('previous conversation history')}>History</Button>}
+            </div>
+            {image && (
+              <div className="image-response-row">
+                <img src={image} alt="uploaded" className="preview-image" />
+                <p className="response-text">{response}</p>
+              </div>
+            )}
+          </>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative', top: '70px' }}>
+            <Button onClick={() => setIsNewChat(true)} variant="filled" color="rgba(0, 0, 0, 1)" onFocus={() => handleSpeak('start a new chat')}>New Chat</Button>
+            <History branch={branch} token={token} setIsNewChat={setIsNewChat} setImage={setImage} setResponse={setResponse}/>
+          </div>
+        )}
     </>
   );
 }

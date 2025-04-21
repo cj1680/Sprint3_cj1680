@@ -41,7 +41,7 @@ def graphs():
             messages=[
                 {
                     "role": "user",
-                    "content": "If not a graph, output 0. Else, Describe the overall shape of the line (e.g., increasing, decreasing, U-shape, V-shape) and extract only the points where the line intersects the major grid lines. Include all intersections, not just x- and y-intercepts. Use this format: 'The shape is a _describe the curve_ and has points at x, y and x, y ... etc.' Where there are dashes put 'negative ' instead. Output nothing else."
+                    "content": "If the input is not a graph, output 0. Otherwise, describe the overall shape of the line (e.g., increasing, decreasing, U-shape, V-shape). Extract only the points where the line intersects the major grid lines, including x- and y-intercepts. Use the format: 'The shape is a [describe the curve]. It has [number of points] points. The first point is: at [point x], [point y]. Next: at [point x], [point y]... Finally: at [point x], [point y].' For negative values, use 'negative' instead of the minus sign."
                 },
                 {
                     "role": "user",
