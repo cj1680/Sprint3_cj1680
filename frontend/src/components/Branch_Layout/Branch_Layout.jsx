@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef  } from 'react';
 import { FileButton, Button } from '@mantine/core';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import History from '../History/History.jsx';
+import { Loader } from '@mantine/core';
 
 export default function Branch_Layout({token, branch}) {
   const [image, setImage] = useState();
@@ -70,6 +71,7 @@ export default function Branch_Layout({token, branch}) {
             </FileButton>
             {token && <Button onClick={() => setIsNewChat(false)} variant="filled" color="rgba(0, 0, 0, 1)" tabIndex={2} onFocus={() => handleFocus('previous conversation history')}>History</Button>}
           </div>
+          {loading && <Loader color="dark" size="sm" style={{ marginTop: '30px' }} />}
           <img src={image} style={{ marginTop: '75px' }}></img>
           <p>{response}</p>
         </>
