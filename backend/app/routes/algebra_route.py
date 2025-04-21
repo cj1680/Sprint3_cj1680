@@ -96,9 +96,9 @@ def algebra():
 
                 # Insert into conversations
                 cursor.execute('''
-                    INSERT INTO conversations (u_id_fk, branch, url, conversation)
-                    VALUES (%s, %s, %s, %s)
-                ''', (u_id, 'algebra', image_url, response_content))
+                    INSERT INTO conversations (u_id_fk, branch, url, conversation, filename)
+                    VALUES (%s, %s, %s, %s, %s)
+                ''', (u_id, 'algebra', image_url, response_content, filename))
 
             conn.commit()
             if cursor:

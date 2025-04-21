@@ -8,10 +8,10 @@ import cloudinary.uploader
 from io import BytesIO
 import psycopg2
 
-bp = Blueprint("graph", __name__, url_prefix="/graph")
+bp = Blueprint("graphs", __name__, url_prefix="/graphs")
 
 @bp.route("/", methods=["POST"])
-def graph():
+def graphs():
 
     if "image" not in request.files:
         return jsonify({"error": "No image uploaded"}), 400
@@ -41,7 +41,7 @@ def graph():
             messages=[
                 {
                     "role": "user",
-                    "content": "If not a graph, output 0. Else, extract only the points where the line intersects the major grid lines in [x, y] format. Include all intersections, not just x- and y-intercepts. Also, describe the overall shape of the line (e.g., increasing, decreasing, U-shape, V-shape). Output nothing else."
+                    "content": "If not a graph, output 0. Else, Describe the overall shape of the line (e.g., increasing, decreasing, U-shape, V-shape) and extract only the points where the line intersects the major grid lines. Include all intersections, not just x- and y-intercepts. Use this format: 'The shape is a _describe the curve_ and has points at x, y and x, y ... etc.' Where there are dashes put 'negative ' instead. Output nothing else."
                 },
                 {
                     "role": "user",
@@ -96,9 +96,9 @@ def graph():
 
                 # Insert into conversations
                 cursor.execute('''
-                    INSERT INTO conversations (u_id_fk, branch, url, conversation)
-                    VALUES (%s, %s, %s, %s)
-                ''', (u_id, 'graph', image_url, response_content))
+                    INSERT INTO conversations (u_id_fk, branch, url, conversation, filename)
+                    VALUES (%s, %s, %s, %s, %s)
+                ''', (u_id, 'graphs', image_url, response_content, filename))
 
             conn.commit()
             if cursor:
