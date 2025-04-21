@@ -11,10 +11,13 @@ import {
 import { useForm } from '@mantine/form';
 import { upperFirst, useToggle } from '@mantine/hooks';
 import { useSpeechSynthesis } from 'react-speech-kit';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { Loader } from '@mantine/core';
 
 export default function Auth({props, setToken}) {
   const [type, toggle] = useToggle(['login', 'register']);
+  const [loading, setLoading] = useState(false);
+  const [audioOutput, setAudioOutput] = useState('');
   const inputRef = useRef(null);
   const signInRef = useRef(null);
 
@@ -47,6 +50,9 @@ export default function Auth({props, setToken}) {
   const handleSubmit = async (values) => {
     const endpoint = type === 'login' ? '/login' : '/register';
 
+    setLoading(true);
+    setAudioOutput('Loading');
+
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}/`, {
         method: 'POST',
@@ -56,7 +62,7 @@ export default function Auth({props, setToken}) {
 
       const data = await response.json();
       if (response.ok) {
-        speak({text: data.message}) // Say success message
+        handleSpeak('Log in successful'); // Say success message
         if (data.token) {
           localStorage.setItem('mathsterToken', data.token);
           setToken(data.token);
@@ -64,13 +70,19 @@ export default function Auth({props, setToken}) {
           console.log('no token');
         }
       } else {
-        alert(data.error); // Show error message
+        handleSpeak(`Failed to ${type}`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred. Please try again.');
+      handleSpeak('An error has occured.')
     }
+
+    setLoading(false);
   };
+
+  useEffect(() => {
+    handleSpeak(audioOutput);
+  }, [audioOutput])
 
   const handleSpeak = (field) => {
     window.speechSynthesis.cancel();
@@ -79,6 +91,12 @@ export default function Auth({props, setToken}) {
 
   return (
     <Paper radius="md" pt="40px" withBorder {...props}>
+      {loading && (
+      <div className="loader-container">
+        <Loader color="black" size="xl" />
+      </div>
+      )}
+
       <Text size="lg" fw={500}>
         {upperFirst(type)}
       </Text>
