@@ -92,14 +92,15 @@ def geometry():
                 #Upload image to storage
                 upload_result = cloudinary.uploader.upload(image_stream)
                 image_url = upload_result['secure_url']
+                image_id = upload_result['public_id']
 
                 u_id = user[0]
 
                 # Insert into conversations
                 cursor.execute('''
-                    INSERT INTO conversations (u_id_fk, branch, url, conversation, filename)
-                    VALUES (%s, %s, %s, %s, %s)
-                ''', (u_id, 'geometry', image_url, response_content, filename))
+                    INSERT INTO conversations (u_id_fk, branch, image_url, image_id, conversation, filename)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                ''', (u_id, 'geometry', image_url, image_id, response_content, filename))
 
             conn.commit()
             if cursor:

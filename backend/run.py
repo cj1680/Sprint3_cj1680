@@ -30,7 +30,8 @@ def startup():
             date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             filename VARCHAR(255),
             branch VARCHAR(100),
-            url VARCHAR(255),
+            image_url VARCHAR(255),
+            image_id VARCHAR(255),
             conversation TEXT,
             FOREIGN KEY (u_id_fk) REFERENCES users(u_id) ON DELETE CASCADE
         );

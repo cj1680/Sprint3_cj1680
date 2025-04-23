@@ -9,7 +9,6 @@ bp = Blueprint("history", __name__, url_prefix="/history")
 
 @bp.route("/", methods=["POST"])
 def history():
-    print('we made it')
     data = request.json
     token = data.get("token")
     branch = data.get("branch")
@@ -27,7 +26,7 @@ def history():
 
         # Fetch user's previous conversation history
         cursor.execute('''
-            SELECT filename, branch, url, conversation
+            SELECT filename, branch, image_url, conversation, c_id
             FROM conversations
             WHERE u_id_fk IN (
                 SELECT u_id
