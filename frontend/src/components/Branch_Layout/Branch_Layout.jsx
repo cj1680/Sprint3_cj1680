@@ -26,6 +26,23 @@ export default function Branch_Layout({token, branch}) {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key.toLowerCase() === 'r') {
+        handleSpeak(response);
+      }
+      if (event.key.toLowerCase() === 'c') {
+        window.speechSynthesis.cancel();
+      }
+    };
+  
+    window.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [response]);
+
   const handleImageChange = async (file) => {
     if (file) {
       const objectURL = URL.createObjectURL(file);
@@ -46,7 +63,7 @@ export default function Branch_Layout({token, branch}) {
         const data = await response.json();
 
         if (data.response != '0') {
-          setResponse(data.response);
+          setResponse(data.response + ' Press the r key to repeat.');
         } else {
           setResponse('This is not a valid image')
         }

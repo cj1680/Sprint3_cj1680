@@ -77,7 +77,7 @@ export default function App() {
           {activeTab === "algebra" && <Branch_Layout token={token} branch={'Algebra'}/>}
         </div>
         <Center>{activeTab === "Sign In" && !token && <Auth setToken={setToken}/>}</Center>
-        
+  
       </MantineProvider>
       </div>
     </FocusTrap>
