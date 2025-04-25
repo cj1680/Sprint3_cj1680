@@ -65,7 +65,13 @@ export default function App() {
           <h1>Mathster</h1>
         </div>
         <div style={{ margin: '20px 0' }}>
-            <RecordAudio setActiveTab={setActiveTab} fileButtonRef={fileButtonRef} activeTab={activeTab} />
+            <RecordAudio 
+            setActiveTab={setActiveTab} 
+            fileButtonRef={fileButtonRef} 
+            activeTab={activeTab} 
+            muted={muted}
+            setMuted={setMuted}
+            />
           </div>
         <div className='tab'>
           <Tabs value={activeTab} onChange={setActiveTab} color="rgba(0, 0, 0, 1)" allowTabDeactivation>

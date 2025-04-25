@@ -6,14 +6,14 @@ import React, { useState } from 'react';
 //import { useNavigate } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
-const RecordAudio = ({ setActiveTab, fileButtonRef }) => {
+const RecordAudio = ({ setActiveTab, fileButtonRef, activeTab, muted, setMuted }) => {
     //const [message, setMessage] = useState('');
     //const navigate=useNavigate();
 
     const commands = [
         {
             command: ['algebra', 'geometry', 'graph', 'sign in', 'log in', 'file upload', 'image upload', 'upload',
-                      'upload image', 'upload file'],
+                      'upload image', 'upload file', 'mute', 'unmute'],
             callback: (command) => {
                 console.log('Voice command received:', command);
                 let commandStr = command.command.toLowerCase();
@@ -30,6 +30,13 @@ const RecordAudio = ({ setActiveTab, fileButtonRef }) => {
                         fileButtonRef.current.click();
                       }
                 }
+                if (commandStr.includes("mute") && !muted) {
+                    setMuted(true);
+                  }
+                  
+                  if (commandStr.includes("unmute") && muted) {
+                    setMuted(false);
+                  }
             }
         }
     ]
