@@ -47,6 +47,13 @@ $ cd ../frontend
 $ npm install
 $ npm run dev
 ```
+## Voice Commands
+Mathster accepts the following voice commands:
+- "graph"
+- "geometry"
+- "algebra"
+- "upload (image/file)"
+- "(sign/log) in"
 
 ## Documentation
 
