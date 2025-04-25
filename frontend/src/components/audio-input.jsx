@@ -7,11 +7,16 @@ import { FaMicrophone, FaMicrophoneAltSlash } from 'react-icons/fa'; // Mic icon
 //import { useNavigate } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
-const RecordAudio = ({ setActiveTab, fileButtonRef, activeTab, muted, setMuted }) => {
+const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, muted, setMuted }) => {
     //const [message, setMessage] = useState('');
     //const navigate=useNavigate();
     // Web Audio API setup to generate tones
     const playTone = (frequency, delay = 0) => {
+        if(muted)
+        {   
+            //if user has muted, don't play tone
+            return;
+        }
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioContext.createOscillator();
         oscillator.type = 'sine'; // Create sin wave oscillator
@@ -26,7 +31,7 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, activeTab, muted, setMuted }
     const commands = [
         {
             command: ['algebra', 'geometry', 'graph', 'sign in', 'log in', 'file upload', 'image upload', 'upload',
-                      'upload image', 'upload file', 'mute', 'unmute'],
+                      'upload image', 'upload file', 'mute', 'unmute', 'register', 'email', 'password'],
             callback: (command) => {
                 console.log('Voice command received:', command);
                 let commandStr = command.command.toLowerCase();
@@ -36,6 +41,9 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, activeTab, muted, setMuted }
                 }
                 if(commandStr === "sign in"||commandStr === "log in"){
                     setActiveTab("Sign In");
+                    if (signInButtonRef.current) {
+                        signInButtonRef.current.click(); // Simulate click on the sign-in/register button
+                    }
                 }
                 // Trigger file upload button click when the command is "file upload"
                 if (commandStr.includes("upload")||commandStr.includes("image")||commandStr.includes("file")) {

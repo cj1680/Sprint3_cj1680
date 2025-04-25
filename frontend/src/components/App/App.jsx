@@ -17,7 +17,8 @@ export default function App() {
 
   const { speak } = useSpeechSynthesis();
 
-  const fileButtonRef = useRef(null);
+  const fileButtonRef = useRef(null);   //for audio-input to click
+  const signInButtonRef = useRef(null); //^^
 
   useEffect(() => {
     const checkToken = async () => {
@@ -68,6 +69,7 @@ export default function App() {
             <RecordAudio 
             setActiveTab={setActiveTab} 
             fileButtonRef={fileButtonRef} 
+            signInButtonRef={signInButtonRef}
             activeTab={activeTab} 
             muted={muted}
             setMuted={setMuted}
