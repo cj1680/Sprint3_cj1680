@@ -5,6 +5,8 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 
 const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, muted, setMuted }) => {
     // Web Audio API setup to generate tones
+    const [isMicOn, setIsMicOn] = useState(false);
+    const [isTransitioning, setIsTransitioning] = useState(false); // prevents overlap
     const playTone = (frequency, delay = 0) => {
         if (muted) {   
             // If user has muted, don't play tone
@@ -28,25 +30,33 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
 
     const [autoStopTimeout, setAutoStopTimeout] = useState(null);
     // Handle Mic button click
-    const handleMicClick = () => {
-        if (listening) {
+    const handleMicClick = async () => {
+        if (isTransitioning) return; // Prevent double-trigger
+        setIsTransitioning(true);
+
+        if (isMicOn) {
             playTone(440);            // 440Hz = A4 -- descending pattern: stop
             playTone(369.99, 250);   // 369.99 Hz = F#4
             SpeechRecognition.stopListening(); // Use SpeechRecognition directly
+            setIsMicOn(false);
             clearTimeout(autoStopTimeout);
             setAutoStopTimeout(null);
         } else {
             playTone(369.99); // ascending pattern: start
             playTone(440, 250);
             SpeechRecognition.startListening({ continuous: true, interimResults: true });
+            setIsMicOn(true);
 
             const timeoutId = setTimeout(() => {
                 SpeechRecognition.stopListening();
+                setIsMicOn(false);
                 setAutoStopTimeout(null);
-            }, 4000); // Auto-stop after 4 seconds
+            }, 3000); // Auto-stop after  seconds
     
             setAutoStopTimeout(timeoutId);
         }
+        // Prevent spam for 500ms
+        setTimeout(() => setIsTransitioning(false), 500);
     };
 
     // Watch for changes in transcript and handle voice commands
@@ -99,6 +109,7 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
             SpeechRecognition.stopListening();
             playTone(440); // Stop tone
             playTone(369.99, 250);
+            setIsMicOn(false);
             setAutoStopTimeout(null);
         }, 4000);
 
@@ -113,16 +124,16 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
             <div className="floating-mic-container">
                 {/* Floating mic button */}
                 <button
-                    className={`floating-mic-button ${listening ? 'recording' : ''}`} // Update color based on listening
+                    className={`floating-mic-button ${isMicOn ? 'recording' : ''}`} // Update color based on listening
                     onClick={handleMicClick}
                     aria-label={listening ? 'Stop recording' : 'Start recording'} // Button text based on listening state
                 >
-                    {listening ? <FaMicrophone /> : <FaMicrophoneAltSlash />}
+                    {isMicOn ? <FaMicrophone /> : <FaMicrophoneAltSlash />}
                 </button>
 
                 {/* Mic Status Text */}
                 <div className="mic-status">
-                    {listening ? 'Recording...' : 'Mic is off'} {/* Adjust the message based on listening */}
+                    {isMicOn ? 'Recording...' : 'Mic is off'} {/* Adjust the message based on listening */}
                 </div>
             </div>
         </div>
