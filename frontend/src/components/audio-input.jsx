@@ -26,35 +26,45 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
         return <span>Browser doesn't support speech recognition.</span>;
     }
 
+    const [autoStopTimeout, setAutoStopTimeout] = useState(null);
     // Handle Mic button click
     const handleMicClick = () => {
         if (listening) {
             playTone(440);            // 440Hz = A4 -- descending pattern: stop
             playTone(369.99, 250);   // 369.99 Hz = F#4
             SpeechRecognition.stopListening(); // Use SpeechRecognition directly
+            clearTimeout(autoStopTimeout);
+            setAutoStopTimeout(null);
         } else {
             playTone(369.99); // ascending pattern: start
             playTone(440, 250);
-            SpeechRecognition.startListening(); // Use SpeechRecognition directly
+            SpeechRecognition.startListening({ continuous: true, interimResults: true });
+
+            const timeoutId = setTimeout(() => {
+                SpeechRecognition.stopListening();
+                setAutoStopTimeout(null);
+            }, 4000); // Auto-stop after 4 seconds
+    
+            setAutoStopTimeout(timeoutId);
         }
     };
 
     // Watch for changes in transcript and handle voice commands
+    // Watch for voice command triggers
     useEffect(() => {
         if (!transcript) return;
 
         const commandStr = transcript.toLowerCase();
         console.log("Voice command received:", commandStr);
 
-        // Handle commands and reset transcript after processing
-        if (["algebra", "geometry", "graph"].includes(commandStr)) {
+        if (commandStr === "algebra" || commandStr === "geometry" || commandStr === "graph") {
             setActiveTab(commandStr);
         }
 
-        if (["sign in", "log in"].includes(commandStr)) {
+        if (commandStr === "sign in" || commandStr === "log in") {
             setActiveTab("Sign In");
             if (signInButtonRef.current) {
-                signInButtonRef.current.click(); // Simulate click on the sign-in/register button
+                signInButtonRef.current.click();
             }
         }
 
@@ -64,17 +74,38 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
             }
         }
 
-        if (commandStr === "mute") {
+        if (commandStr.includes("mute") && !muted) {
             setMuted(true);
         }
 
-        if (commandStr === "unmute") {
+        if (commandStr.includes("unmute") && muted) {
             setMuted(false);
         }
 
-        // Reset the transcript after processing the command
-        resetTranscript();
-    }, [transcript, setActiveTab, fileButtonRef, signInButtonRef, setMuted, resetTranscript]);
+        setTimeout(() => {
+            resetTranscript();
+        }, 500);
+    }, [transcript]);
+
+    // Auto-stop after 4s of silence — reset on each transcript update
+    useEffect(() => {
+        if (!listening) return;
+
+        if (autoStopTimeout) {
+            clearTimeout(autoStopTimeout);
+        }
+
+        const timeoutId = setTimeout(() => {
+            SpeechRecognition.stopListening();
+            playTone(440); // Stop tone
+            playTone(369.99, 250);
+            setAutoStopTimeout(null);
+        }, 4000);
+
+        setAutoStopTimeout(timeoutId);
+
+        return () => clearTimeout(timeoutId);
+    }, [transcript, listening]);
 
     return (
         <div className="audio-input-container">
