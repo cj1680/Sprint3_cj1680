@@ -53,7 +53,7 @@ Mathster accepts the following voice commands:
 - "graph"
 - "geometry"
 - "algebra"
-- "upload (image/file)"
+- "upload (image/file)"/"(image/file) upload"
 - "(sign/log) in"
 
 ## Documentation
