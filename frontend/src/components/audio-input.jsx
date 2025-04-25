@@ -10,7 +10,18 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 const RecordAudio = ({ setActiveTab, fileButtonRef, activeTab, muted, setMuted }) => {
     //const [message, setMessage] = useState('');
     //const navigate=useNavigate();
-    const [isRecording, setIsRecording] = useState(false);
+    // Web Audio API setup to generate tones
+    const playTone = (frequency, delay = 0) => {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        oscillator.type = 'sine'; // Create sin wave oscillator
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime + delay / 1000);
+        oscillator.connect(audioContext.destination); // Connect the oscillator to the output (speakers)
+
+        oscillator.start(audioContext.currentTime + delay / 1000);
+        oscillator.stop(audioContext.currentTime + (delay + 200) / 1000); // 200ms duration
+        //}, 200); // Stop the tone after 200ms
+    };
 
     const commands = [
         {
@@ -50,8 +61,12 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, activeTab, muted, setMuted }
 
     const handleMicClick = () => {
         if (listening) {
+            playTone(440);            //440Hz = A4 -- descending pattern: stop
+            playTone(369.99, 250);   // 369.99 Hz = F#4
             SpeechRecognition.stopListening(); // Use SpeechRecognition directly
         } else {
+            playTone(369.99); // ascending pattern: start
+            playTone(440, 250);
             SpeechRecognition.startListening(); // Use SpeechRecognition directly
         }
     };
