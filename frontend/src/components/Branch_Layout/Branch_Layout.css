@@ -39,3 +39,7 @@ h2{
     font-size: 1.1rem;
     line-height: 1.5;
 }
+
+*{
+    color: rgba(5, 3, 19, 0.684);
+}

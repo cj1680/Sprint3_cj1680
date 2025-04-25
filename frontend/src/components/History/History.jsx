@@ -3,17 +3,21 @@ import { useState, useEffect, useRef } from 'react';
 import React from 'react';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import { BsFillTrash2Fill } from "react-icons/bs";
+import { Loader } from '@mantine/core';
 import './History.css';
 
-export default function History({ branch, token, setIsNewChat, setImage, setResponse }) {
+export default function History({ branch, token, setIsNewChat, setImage, setResponse, muted }) {
   const [convos, setConvos] = useState([]);
   const [convosLen, setConvosLen] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [audioOutput, setAudioOutput] = useState('');
   const ref = useRef(null);
 
   const { speak } = useSpeechSynthesis();
 
   useEffect(() => {
     const getHistory = async () => {
+      setAudioOutput('Loading');
       if (token) {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/history/`, {
           method: 'POST',
@@ -29,6 +33,7 @@ export default function History({ branch, token, setIsNewChat, setImage, setResp
         setConvosLen(result.length)
         setConvos(result);
       }
+      setLoading(false);
     };
     getHistory();
   }, [branch, token]);
@@ -37,7 +42,7 @@ export default function History({ branch, token, setIsNewChat, setImage, setResp
 
     if (convos.length > 0 && ref.current) {
       ref.current.focus();
-      if (convos.length >= convosLen)
+      if (convos.length >= convosLen && !muted)
       {
         handleSpeak(
           `${convos.length} conversation${convos.length === 1 ? '' : 's'} retrieved`
@@ -48,9 +53,15 @@ export default function History({ branch, token, setIsNewChat, setImage, setResp
     }
   }, [convos]);
 
+  useEffect(() => {
+    handleSpeak(audioOutput)
+  }, [audioOutput]);
+
   const handleSpeak = (button) => {
-    window.speechSynthesis.cancel();
-    speak({ text: button });
+    if (!muted){
+      window.speechSynthesis.cancel();
+      speak({ text: button });
+    }
   };
 
   const openConvo = (convo) => {
@@ -71,38 +82,45 @@ export default function History({ branch, token, setIsNewChat, setImage, setResp
   }
 
   return (
-    <Stack align="stretch" justify="center" gap="lg">
-      {convos.map((convo, index) => (
-        <div className="container" key={index}>
-          <div className="group">
-            <Button
-              variant="filled"
-              color="rgba(0, 0, 0, 1)"
-              onClick={() => openConvo(convo)}
-              ref={index === 0 ? ref : null}
-              onFocus={() => handleSpeak(`${convo[0]}`)}
-            >
-              {convo[0]}
-            </Button>
-      
-            <BsFillTrash2Fill 
-              onClick={() => {
-                deleteConvo(convo[4]);
-              }} 
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.stopPropagation();
-                  e.preventDefault();
+    <>
+      {loading && (
+        <div className="loader-container">
+          <Loader color="black" size="xl" />
+        </div>
+      )}
+      <Stack align="stretch" justify="center" gap="lg">
+        {convos.map((convo, index) => (
+          <div className="container" key={index}>
+            <div className="group">
+              <Button
+                variant="filled"
+                color="rgba(0, 0, 0, 1)"
+                onClick={() => openConvo(convo)}
+                ref={index === 0 ? ref : null}
+                onFocus={() => handleSpeak(`${convo[0]}`)}
+              >
+                {convo[0]}
+              </Button>
+        
+              <BsFillTrash2Fill 
+                onClick={() => {
                   deleteConvo(convo[4]);
-                }
-              }}
-              onFocus={() => handleSpeak(`Delete ${convo[0]}`)}
-              tabIndex={0}
-              className="right"
-            />
-          </div>
-        </div>      
-      ))}
-    </Stack>
+                }} 
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    deleteConvo(convo[4]);
+                  }
+                }}
+                onFocus={() => handleSpeak(`Delete ${convo[0]}`)}
+                tabIndex={0}
+                className="right"
+              />
+            </div>
+          </div>      
+        ))}
+      </Stack>
+    </>
   );
 }

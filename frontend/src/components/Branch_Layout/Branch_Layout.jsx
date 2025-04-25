@@ -5,7 +5,7 @@ import { useSpeechSynthesis } from 'react-speech-kit';
 import History from '../History/History.jsx';
 import { Loader } from '@mantine/core';
 
-export default function Branch_Layout({token, branch}) {
+export default function Branch_Layout({token, branch, muted}) {
   const [image, setImage] = useState();
   const [response, setResponse] = useState('');
   const [isNewChat, setIsNewChat] = useState(true);
@@ -63,7 +63,7 @@ export default function Branch_Layout({token, branch}) {
         const data = await response.json();
 
         if (data.response != '0') {
-          setResponse(data.response + ' Press the r key to repeat.');
+          setResponse(data.response);
         } else {
           setResponse('This is not a valid image')
         }
@@ -87,8 +87,10 @@ export default function Branch_Layout({token, branch}) {
   }, [audioOutput])
 
   const handleSpeak = (output) => {
-    window.speechSynthesis.cancel();
-    speak({ text: output });
+    if (!muted){
+      window.speechSynthesis.cancel();
+      speak({ text: output });
+    }
   }
 
   return (
@@ -117,7 +119,7 @@ export default function Branch_Layout({token, branch}) {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative', top: '70px' }}>
             <Button onClick={() => setIsNewChat(true)} variant="filled" color="rgba(0, 0, 0, 1)" onFocus={() => handleSpeak('start a new chat')}>New Chat</Button>
-            <History branch={branch} token={token} setIsNewChat={setIsNewChat} setImage={setImage} setResponse={setResponse}/>
+            <History branch={branch} token={token} setIsNewChat={setIsNewChat} setImage={setImage} setResponse={setResponse} muted={muted} />
           </div>
         )}
     </>
