@@ -55,6 +55,7 @@ Mathster accepts the following voice commands:
 - "algebra"
 - "upload (image/file)"/"(image/file) upload"
 - "(sign/log) in"
+- "mute"/"unmute"
 
 ## Documentation
 
