@@ -65,7 +65,7 @@ export default function App() {
         <div>
           <h1>Mathster</h1>
         </div>
-        <div style={{ margin: '20px 0' }}>
+        <div>
             <RecordAudio 
             setActiveTab={setActiveTab} 
             fileButtonRef={fileButtonRef} 
