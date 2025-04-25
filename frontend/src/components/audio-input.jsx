@@ -3,12 +3,14 @@
 
 import './audio-input.css'
 import React, { useState } from 'react';
+import { FaMicrophone, FaMicrophoneAltSlash } from 'react-icons/fa'; // Mic icons from react-icons
 //import { useNavigate } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 const RecordAudio = ({ setActiveTab, fileButtonRef, activeTab, muted, setMuted }) => {
     //const [message, setMessage] = useState('');
     //const navigate=useNavigate();
+    const [isRecording, setIsRecording] = useState(false);
 
     const commands = [
         {
@@ -40,25 +42,37 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, activeTab, muted, setMuted }
             }
         }
     ]
-    const {
-        listening,
-        resetTranscript,
-        browserSupportsSpeechRecognition
-    } = useSpeechRecognition({ commands });
+    const { listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition({ commands });
 
     if (!browserSupportsSpeechRecognition) {
         return <span>Browser doesn't support speech recognition.</span>;
     }
 
+    const handleMicClick = () => {
+        if (listening) {
+            SpeechRecognition.stopListening(); // Use SpeechRecognition directly
+        } else {
+            SpeechRecognition.startListening(); // Use SpeechRecognition directly
+        }
+    };
+
     return (
-        <div>
-          {/* Microphone status display */}
-            <p style={{ fontWeight: 'bold', marginTop: '10px' }}>
-                Microphone is: {listening ? '🎤 ON' : '🔇 OFF'}
-            </p>
-          <button className="butt" onClick={SpeechRecognition.startListening}>Start</button>
-          <button className="butt" onClick={SpeechRecognition.stopListening}>Stop</button>
-          <button className="butt" onClick={resetTranscript}>Reset</button>
+        <div className="audio-input-container">
+            <div className="floating-mic-container">
+                {/* Floating mic button */}
+                <button
+                    className={`floating-mic-button ${listening ? 'recording' : ''}`} // Update color based on listening
+                    onClick={handleMicClick}
+                    aria-label={listening ? 'Stop recording' : 'Start recording'} // Button text based on listening state
+                >
+                    {listening ? <FaMicrophone /> : <FaMicrophoneAltSlash />}
+                </button>
+
+                {/* Mic Status Text */}
+                <div className="mic-status">
+                    {listening ? 'Recording...' : 'Mic is off'} {/* Adjust the message based on listening */}
+                </div>
+            </div>
         </div>
     );
 };
