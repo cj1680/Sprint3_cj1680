@@ -5,7 +5,7 @@ import { useSpeechSynthesis } from 'react-speech-kit';
 import History from '../History/History.jsx';
 import { Loader } from '@mantine/core';
 
-export default function Branch_Layout({token, branch, muted}) {
+export default function Branch_Layout({token, branch, muted, fileButtonRef}) {
   const [image, setImage] = useState();
   const [response, setResponse] = useState('');
   const [isNewChat, setIsNewChat] = useState(true);
@@ -104,7 +104,7 @@ export default function Branch_Layout({token, branch, muted}) {
         {isNewChat ? (
           <>
             <div className='butt'>
-              <FileButton onChange={handleImageChange} accept="image/png,image/jpeg,image/jpg" style={{ backgroundColor: 'black', color: 'white' }}>
+              <FileButton onChange={handleImageChange} accept="image/png,image/jpeg,image/jpg" style={{ backgroundColor: 'black', color: 'white' }} ref={fileButtonRef}>
                   {(props) => <Button {...props} tabIndex={1} ref={inputRef} onFocus={() => handleSpeak('upload an image')}>Upload image</Button>}
               </FileButton>
               {token && <Button onClick={() => setIsNewChat(false)} variant="filled" color="rgba(0, 0, 0, 1)" tabIndex={2} onFocus={() => handleSpeak('previous conversation history')}>History</Button>}
