@@ -1,20 +1,13 @@
-//using react-speech-to-text, handle audio recording and UI navigation
-//Unlike audio-input branch, recording, processing, and navigation are all handled in frontend through React
-
-import './audio-input.css'
-import React, { useState } from 'react';
+import './audio-input.css';
+import React, { useState, useEffect } from 'react';
 import { FaMicrophone, FaMicrophoneAltSlash } from 'react-icons/fa'; // Mic icons from react-icons
-//import { useNavigate } from 'react-router-dom';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, muted, setMuted }) => {
-    //const [message, setMessage] = useState('');
-    //const navigate=useNavigate();
     // Web Audio API setup to generate tones
     const playTone = (frequency, delay = 0) => {
-        if(muted)
-        {   
-            //if user has muted, don't play tone
+        if (muted) {   
+            // If user has muted, don't play tone
             return;
         }
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -25,51 +18,18 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
 
         oscillator.start(audioContext.currentTime + delay / 1000);
         oscillator.stop(audioContext.currentTime + (delay + 200) / 1000); // 200ms duration
-        //}, 200); // Stop the tone after 200ms
     };
 
-    const commands = [
-        {
-            command: ['algebra', 'geometry', 'graph', 'sign in', 'log in', 'file upload', 'image upload', 'upload',
-                      'upload image', 'upload file', 'mute', 'unmute', 'register', 'email', 'password'],
-            callback: (command) => {
-                console.log('Voice command received:', command);
-                let commandStr = command.command.toLowerCase();
-                console.log('Formatted command:', commandStr);
-                if (commandStr === "algebra" || commandStr === "geometry" || commandStr === "graph") {
-                    setActiveTab(commandStr);
-                }
-                if(commandStr === "sign in"||commandStr === "log in"){
-                    setActiveTab("Sign In");
-                    if (signInButtonRef.current) {
-                        signInButtonRef.current.click(); // Simulate click on the sign-in/register button
-                    }
-                }
-                // Trigger file upload button click when the command is "file upload"
-                if (commandStr.includes("upload")||commandStr.includes("image")||commandStr.includes("file")) {
-                    if (fileButtonRef.current) {
-                        fileButtonRef.current.click();
-                      }
-                }
-                if (commandStr.includes("mute") && !muted) {
-                    setMuted(true);
-                  }
-                  
-                  if (commandStr.includes("unmute") && muted) {
-                    setMuted(false);
-                  }
-            }
-        }
-    ]
-    const { listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition({ commands });
+    const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
 
     if (!browserSupportsSpeechRecognition) {
         return <span>Browser doesn't support speech recognition.</span>;
     }
 
+    // Handle Mic button click
     const handleMicClick = () => {
         if (listening) {
-            playTone(440);            //440Hz = A4 -- descending pattern: stop
+            playTone(440);            // 440Hz = A4 -- descending pattern: stop
             playTone(369.99, 250);   // 369.99 Hz = F#4
             SpeechRecognition.stopListening(); // Use SpeechRecognition directly
         } else {
@@ -79,8 +39,46 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
         }
     };
 
+    // Watch for changes in transcript and handle voice commands
+    useEffect(() => {
+        if (!transcript) return;
+
+        const commandStr = transcript.toLowerCase();
+        console.log("Voice command received:", commandStr);
+
+        // Handle commands and reset transcript after processing
+        if (["algebra", "geometry", "graph"].includes(commandStr)) {
+            setActiveTab(commandStr);
+        }
+
+        if (["sign in", "log in"].includes(commandStr)) {
+            setActiveTab("Sign In");
+            if (signInButtonRef.current) {
+                signInButtonRef.current.click(); // Simulate click on the sign-in/register button
+            }
+        }
+
+        if (commandStr.includes("upload") || commandStr.includes("image") || commandStr.includes("file")) {
+            if (fileButtonRef.current) {
+                fileButtonRef.current.click();
+            }
+        }
+
+        if (commandStr === "mute") {
+            setMuted(true);
+        }
+
+        if (commandStr === "unmute") {
+            setMuted(false);
+        }
+
+        // Reset the transcript after processing the command
+        resetTranscript();
+    }, [transcript, setActiveTab, fileButtonRef, signInButtonRef, setMuted, resetTranscript]);
+
     return (
         <div className="audio-input-container">
+            <p>{transcript}</p>
             <div className="floating-mic-container">
                 {/* Floating mic button */}
                 <button
@@ -99,4 +97,5 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
         </div>
     );
 };
-export default RecordAudio; 
+
+export default RecordAudio;
