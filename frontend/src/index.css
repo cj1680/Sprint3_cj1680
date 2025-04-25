@@ -32,8 +32,12 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 2.5em;
   line-height: 1.1;
+  user-select: none;
+}
+h2 {
+  user-select: none;
 }
 
 button {
@@ -48,7 +52,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #77788a;
+  border-color: #5258b8;
 }
 button:focus,
 button:focus-visible {
