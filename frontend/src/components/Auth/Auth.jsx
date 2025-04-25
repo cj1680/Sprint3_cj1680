@@ -14,7 +14,7 @@ import { useSpeechSynthesis } from 'react-speech-kit';
 import { useEffect, useState, useRef } from 'react';
 import { Loader } from '@mantine/core';
 
-export default function Auth({props, setToken}) {
+export default function Auth({props, setToken, muted}) {
   const [type, toggle] = useToggle(['login', 'register']);
   const [loading, setLoading] = useState(false);
   const [audioOutput, setAudioOutput] = useState('');
@@ -85,8 +85,10 @@ export default function Auth({props, setToken}) {
   }, [audioOutput])
 
   const handleSpeak = (field) => {
-    window.speechSynthesis.cancel();
-    speak({ text: field });
+    if (!muted) {
+      window.speechSynthesis.cancel();
+      speak({ text: field });
+    }
   }
 
   return (

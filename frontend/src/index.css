@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: #c41d1dde;
-  background-color: #c2771b;
+  background-color: #f8edeb;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -32,8 +32,12 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 2.5em;
   line-height: 1.1;
+  user-select: none;
+}
+h2 {
+  user-select: none;
 }
 
 button {

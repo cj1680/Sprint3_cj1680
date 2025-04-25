@@ -44,7 +44,7 @@
 
 *{
   margin: 0;
-  background-color: #c2771b;
+  background-color: #f8edeb;
   font-size: 30px;
   font-weight: bold;
   padding: 0;
@@ -63,4 +63,19 @@
 h1{
   transform: translateX(-20px);
   transform: translateY(20px);
+}
+.volume{
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 50px;
+}
+
+.button {
+  background-color: transparent;
+  outline: none;
+}
+
+.button:hover {
+  background-color: white;
+  outline: none;
 }

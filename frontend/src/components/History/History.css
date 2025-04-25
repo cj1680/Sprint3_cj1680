@@ -5,17 +5,20 @@
     justify-content: center;
     align-items: center;
     height: 60px;
-  }
+}
   
-  .centered {
-    font-weight: bold;
-    z-index: 1; /* Ensure it's above the background */
-  }
+.centered {
+  font-weight: bold;
+  z-index: 1; /* Ensure it's above the background */
+}
   
-  .right {
-    position: absolute;
-    right: -50px; /* 👈 Distance from the right edge */
-    top: 15px;
-    cursor: pointer;
-  }
-  
+.right {
+  position: absolute;
+  right: -50px; /* 👈 Distance from the right edge */
+  top: 15px;
+  cursor: pointer;
+}
+
+.loader-container{
+  top: 130px;
+}
