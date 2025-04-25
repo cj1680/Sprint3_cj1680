@@ -26,6 +26,7 @@ Mathster provides text feedback as audio output for the following subjects:
 - Graphs
 - Geometry
 - Algebra
+
 Master allows the use of voice commands to navigate the UI
 
 ## Get Started
