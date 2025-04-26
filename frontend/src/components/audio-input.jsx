@@ -79,9 +79,12 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
         }
 
         if (commandStr.includes("upload") || commandStr.includes("image") || commandStr.includes("file")) {
-            if (fileButtonRef.current) {
-                fileButtonRef.current.click();
-            }
+            // Adding a small delay before triggering the click event
+            setTimeout(() => {
+                if (fileButtonRef.current) {
+                    fileButtonRef.current.click();
+                }
+            }, 100);  // Small delay (100ms)
         }
 
         if (commandStr.includes("mute") && !muted) {
@@ -120,7 +123,7 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
 
     return (
         <div className="audio-input-container">
-            <p>{transcript}</p>
+            {/* <p>{transcript}</p> */}
             <div className="floating-mic-container">
                 {/* Floating mic button */}
                 <button

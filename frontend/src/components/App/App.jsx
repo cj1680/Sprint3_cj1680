@@ -63,7 +63,7 @@ export default function App() {
       <div tabIndex={-1}>
       <MantineProvider>
         <div>
-          <h1>Mathster</h1>
+          <h1>Testing</h1>
         </div>
         <div>
             <RecordAudio 
