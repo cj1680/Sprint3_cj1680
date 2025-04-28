@@ -67,7 +67,10 @@ export default function History({ branch, token, setIsNewChat, setImage, setResp
   const openConvo = (convo) => {
     setIsNewChat(true);
     setImage(convo[2]);
-    setResponse(convo[3]);
+
+    const content = convo[3].match(/"(.*?)"/);
+    const insideQuotes = content ? content[1] : '';
+    setResponse(insideQuotes);
   };
 
   const deleteConvo = (c_id) => {

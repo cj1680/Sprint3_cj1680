@@ -30,75 +30,87 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
 
     const [autoStopTimeout, setAutoStopTimeout] = useState(null);
     // Handle Mic button click
-    const handleMicClick = async () => {
-        if (isTransitioning) return; // Prevent double-trigger
+    const handleMicClick = () => {
+        if (isTransitioning) return;
         setIsTransitioning(true);
-
-        if (isMicOn) {
-            playTone(440);            // 440Hz = A4 -- descending pattern: stop
-            playTone(369.99, 250);   // 369.99 Hz = F#4
-            SpeechRecognition.stopListening(); // Use SpeechRecognition directly
-            setIsMicOn(false);
-            clearTimeout(autoStopTimeout);
-            setAutoStopTimeout(null);
-        } else {
-            playTone(369.99); // ascending pattern: start
-            playTone(440, 250);
-            SpeechRecognition.startListening({ continuous: true, interimResults: true });
-            setIsMicOn(true);
-
-            const timeoutId = setTimeout(() => {
-                SpeechRecognition.stopListening();
-                setIsMicOn(false);
-                setAutoStopTimeout(null);
-            }, 3000); // Auto-stop after  seconds
     
-            setAutoStopTimeout(timeoutId);
+        if (isMicOn) {
+            stopMic();
+        } else {
+            startMic();
         }
-        // Prevent spam for 500ms
+    
         setTimeout(() => setIsTransitioning(false), 500);
     };
+
+    const startMic = () => {
+        playTone(369.99);
+        playTone(440, 250);
+        SpeechRecognition.startListening({ continuous: true, interimResults: true });
+        setIsMicOn(true);
+    
+        const timeoutId = setTimeout(() => {
+            SpeechRecognition.stopListening();
+            setIsMicOn(false);
+            setAutoStopTimeout(null);
+        }, 3000);
+    
+        setAutoStopTimeout(timeoutId);
+    };
+    
+    const stopMic = () => {
+        playTone(440);
+        playTone(369.99, 250);
+        SpeechRecognition.stopListening();
+        setIsMicOn(false);
+        if (autoStopTimeout) {
+            clearTimeout(autoStopTimeout);
+            setAutoStopTimeout(null);
+        }
+    };
+    
 
     // Watch for changes in transcript and handle voice commands
     // Watch for voice command triggers
     useEffect(() => {
         if (!transcript) return;
-
-        const commandStr = transcript.toLowerCase();
-        console.log("Voice command received:", commandStr);
-
-        if (commandStr === "algebra" || commandStr === "geometry" || commandStr === "graph") {
-            setActiveTab(commandStr);
-        }
-
-        if (commandStr === "sign in" || commandStr === "log in") {
-            setActiveTab("Sign In");
-            if (signInButtonRef.current) {
-                signInButtonRef.current.click();
+    
+        const delay = setTimeout(() => {
+            const commandStr = transcript.toLowerCase().replace(/[^\w\s]/gi, '').trim();
+            console.log("Voice command received:", commandStr);
+    
+            if (commandStr === "algebra" || commandStr === "geometry" || commandStr === "graph") {
+                setActiveTab(commandStr);
             }
-        }
-
-        if (commandStr.includes("upload") || commandStr.includes("image") || commandStr.includes("file")) {
-            // Adding a small delay before triggering the click event
-            setTimeout(() => {
+    
+            if (commandStr === "sign in" || commandStr === "log in") {
+                setActiveTab("Sign In");
+                if (signInButtonRef.current) {
+                    signInButtonRef.current.click();
+                }
+            }
+    
+            if (commandStr.includes("upload") || commandStr.includes("image") || commandStr.includes("file")) {
                 if (fileButtonRef.current) {
                     fileButtonRef.current.click();
                 }
-            }, 100);  // Small delay (100ms)
-        }
-
-        if (commandStr.includes("mute") && !muted) {
-            setMuted(true);
-        }
-
-        if (commandStr.includes("unmute") && muted) {
-            setMuted(false);
-        }
-
-        setTimeout(() => {
+                
+            }
+    
+            if (commandStr.includes("mute") && !muted) {
+                setMuted(true);
+            }
+    
+            if (commandStr.includes("unmute") && muted) {
+                setMuted(false);
+            }
+    
             resetTranscript();
-        }, 500);
+        }, 300); // <-- delay of 300ms before processing
+    
+        return () => clearTimeout(delay); // <-- cancel if transcript changes quickly
     }, [transcript]);
+    
 
     // Auto-stop after 4s of silence — reset on each transcript update
     useEffect(() => {
@@ -120,6 +132,27 @@ const RecordAudio = ({ setActiveTab, fileButtonRef, signInButtonRef, activeTab, 
 
         return () => clearTimeout(timeoutId);
     }, [transcript, listening]);
+
+    //Activates and deactivates mic by pressing f key
+    useEffect(() => {
+        const handleKeyPress = (event) => {
+            if (event.key.toLowerCase() === 'f') {
+                if (isMicOn) {
+                    stopMic();
+                } else {
+                    startMic();
+                }
+            }
+        };
+    
+        window.addEventListener('keydown', handleKeyPress);
+    
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [isMicOn]);
+    
+    
 
     return (
         <div className="audio-input-container">

@@ -92,12 +92,7 @@ export default function Auth({props, setToken, muted}) {
   }
 
   return (
-    <Paper radius="md" pt="40px" withBorder {...props}>
-      {loading && (
-      <div className="loader-container">
-        <Loader color="black" size="xl" />
-      </div>
-      )}
+    <Paper radius="md" pt="28px" pos='relative' withBorder {...props}>
 
       <Text size="lg" fw={500}>
         {upperFirst(type)}
@@ -128,7 +123,11 @@ export default function Auth({props, setToken, muted}) {
             onFocus={() => handleSpeak('enter a password. Must be at least 6 characters long')}
           />
         </Stack>
-
+        {loading && (
+          <div className="loader-overlay">
+            <Loader color="black" size="xl" />
+          </div>
+        )}
         <Group justify="space-between" mt="xl">
           <Anchor component="button" 
             type="button" 
