@@ -15,8 +15,7 @@ jobs:
 
       - name: Run Pa11y on staging site with --no-sandbox flag
         run: |
-          export PA11Y_CHROME_FLAGS="--no-sandbox"
-          pa11y https://mathster3444staging.netlify.app/ > pa11y-staging.txt
+          pa11y https://mathster3444staging.netlify.app/ --no-sandbox > pa11y-staging.txt
           cat pa11y-staging.txt
 
       - name: Upload Pa11y Report
