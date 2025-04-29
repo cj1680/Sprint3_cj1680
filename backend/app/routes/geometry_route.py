@@ -41,7 +41,7 @@ def geometry():
             messages=[
                 {
                     "role": "user",
-                    "content": "If not a geometric image, output 0. Else, extract the shape and its properties in this format: 'The shape is a _shape_ where angle A is _angle_, angle B is _angle, and angle C is _angle. The side length from A to B is _length_... etc.' Use 'not defined' for unknown values. Also spell out units completely if the image has units. ONLY output the desired format."
+                    "content": "If not a geometric image, ONLY output 0. Else, extract the shape and its properties in this format: 'The shape is a _shape_ where angle A is _angle_, angle B is _angle, and angle C is _angle. The side length from A to B is _length_... etc.' Use 'not defined' for unknown values. Also spell out units completely if the image has units. ONLY output the desired format."
                 },
                 {
                     "role": "user",

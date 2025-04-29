@@ -36,12 +36,12 @@ def graphs():
 
     try:
         message = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
-            max_tokens=300,
+            model="claude-3-5-sonnet-20240620",
+            max_tokens=600,
             messages=[
                 {
                     "role": "user",
-                    "content": "If the input is not a graph, output 0. Otherwise, describe the overall shape of the line (e.g., increasing, decreasing, U-shape, V-shape). Extract only the points where the line intersects the major grid lines, including x- and y-intercepts. Use the format: 'The shape is a [describe the curve]. It has [number of points] points. The first point is: at [point x], [point y]. Next: at [point x], [point y]... Finally: at [point x], [point y].' For negative values, use 'negative' instead of the minus sign."
+                    "content": "If the input is not a graph, ONLY output 0. Otherwise, describe the overall shape of the line (e.g., increasing, decreasing, U-shape, V-shape). Extract only the points where the line intersects the grid lines, including x- and y-intercepts. ONLY output the points visually on the image. If the points are not on the image, (outside the image) do not display them. Do not use any math only visuals to determine the points. Use the format: 'The shape is a [describe the curve]. It has [number of points] points. The first point is: at [point x], [point y]. Next: at [point x], [point y]... Finally: at [point x], [point y].' For negative values, use 'negative' instead of the minus sign."
                 },
                 {
                     "role": "user",

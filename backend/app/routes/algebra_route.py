@@ -41,7 +41,7 @@ def algebra():
             messages=[
                 {
                     "role": "user",
-                    "content": "If the image does not have an algebraic equation explicitely in the image, output 0. Else, extract the equation from the image and output it in a fully readable text format. Use words for symbols where needed to ensure clarity for a voice generator. Output ONLY the worded equation"
+                    "content": "If the image does not have an algebraic equation explicitely in the image, ONLY output 0. Else, extract the equation from the image and output it in a fully readable text format. Use words for symbols where needed to ensure clarity for a voice generator. Output ONLY the worded equation"
                 },
                 {
                     "role": "user",

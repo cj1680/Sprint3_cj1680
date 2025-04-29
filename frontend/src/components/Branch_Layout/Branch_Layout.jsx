@@ -5,13 +5,14 @@ import { useSpeechSynthesis } from 'react-speech-kit';
 import History from '../History/History.jsx';
 import { Loader } from '@mantine/core';
 
-export default function Branch_Layout({token, branch, muted}) {
+export default function Branch_Layout({token, branch, muted, fileButtonRef}) {
   const [image, setImage] = useState();
   const [response, setResponse] = useState('');
   const [isNewChat, setIsNewChat] = useState(true);
   const [loading, setLoading] = useState(false);
   const [audioOutput, setAudioOutput] = useState("");
   const inputRef = useRef(null);
+  const bottomRef = useRef(null);
 
   const { speak } = useSpeechSynthesis();
 
@@ -35,9 +36,11 @@ export default function Branch_Layout({token, branch, muted}) {
         window.speechSynthesis.cancel();
       }
     };
-  
+    if (response){
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+
     window.addEventListener('keydown', handleKeyDown);
-    
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
@@ -96,22 +99,27 @@ export default function Branch_Layout({token, branch, muted}) {
   return (
     <>
         <h2>{branch}:</h2>
-        {loading && (
-          <div className="loader-container">
-            <Loader color="black" size="xl" />
-          </div>
-        )}
         {isNewChat ? (
           <>
             <div className='butt'>
-              <FileButton onChange={handleImageChange} accept="image/png,image/jpeg,image/jpg" style={{ backgroundColor: 'black', color: 'white' }}>
-                  {(props) => <Button {...props} tabIndex={1} ref={inputRef} onFocus={() => handleSpeak('upload an image')}>Upload image</Button>}
-              </FileButton>
+            <FileButton onChange={handleImageChange} accept="image/png,image/jpeg,image/jpg" ref={fileButtonRef}>
+              {({ onClick }) => (
+                <Button
+                  onClick={onClick}
+                  tabIndex={1}
+                  style={{ backgroundColor: 'black', color: 'white' }}
+                  onFocus={() => handleSpeak('upload an image')}
+                >
+                  Upload image
+                </Button>
+              )}
+            </FileButton>
               {token && <Button onClick={() => setIsNewChat(false)} variant="filled" color="rgba(0, 0, 0, 1)" tabIndex={2} onFocus={() => handleSpeak('previous conversation history')}>History</Button>}
             </div>
             {image && (
               <div className="image-response-row">
                 <img src={image} alt="uploaded" className="preview-image" />
+                {loading && (<Loader color="black" size="xl" /> )}
                 <p className="response-text">{response}</p>
               </div>
             )}
@@ -122,6 +130,7 @@ export default function Branch_Layout({token, branch, muted}) {
             <History branch={branch} token={token} setIsNewChat={setIsNewChat} setImage={setImage} setResponse={setResponse} muted={muted} />
           </div>
         )}
+        <div ref={bottomRef} />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import '@mantine/core/styles.css';
 import { MantineProvider, Center, Tabs } from '@mantine/core';
@@ -8,6 +8,7 @@ import Auth from '../Auth/Auth.jsx';
 import Branch_Layout from '../Branch_Layout/Branch_Layout.jsx';
 import { FaVolumeUp } from "react-icons/fa";
 import { FaVolumeMute } from "react-icons/fa";
+import RecordAudio from '../audio-input.jsx';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('Sign In');
@@ -15,6 +16,9 @@ export default function App() {
   const [muted, setMuted] = useState(false)
 
   const { speak } = useSpeechSynthesis();
+
+  const fileButtonRef = useRef(null);   //for audio-input to click
+  const signInButtonRef = useRef(null); //^^
 
   useEffect(() => {
     const checkToken = async () => {
@@ -61,6 +65,16 @@ export default function App() {
         <div>
           <h1>Mathster</h1>
         </div>
+        <div>
+            <RecordAudio 
+            setActiveTab={setActiveTab} 
+            fileButtonRef={fileButtonRef} 
+            signInButtonRef={signInButtonRef}
+            activeTab={activeTab} 
+            muted={muted}
+            setMuted={setMuted}
+            />
+          </div>
         <div className='tab'>
           <Tabs value={activeTab} onChange={setActiveTab} color="rgba(0, 0, 0, 1)" allowTabDeactivation>
             <Tabs.List style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
@@ -80,9 +94,9 @@ export default function App() {
           </Tabs>
         </div>
         <div>
-          {activeTab === "graph" && <Branch_Layout token={token} branch={'Graphs'} muted={muted} />}
-          {activeTab === "geometry" && <Branch_Layout token={token} branch={'Geometry'} muted={muted} />}
-          {activeTab === "algebra" && <Branch_Layout token={token} branch={'Algebra'} muted={muted} />}
+          {activeTab === "graph" && <Branch_Layout token={token} branch={'Graphs'} muted={muted} fileButtonRef={fileButtonRef} />}
+          {activeTab === "geometry" && <Branch_Layout token={token} branch={'Geometry'} muted={muted} fileButtonRef={fileButtonRef} />}
+          {activeTab === "algebra" && <Branch_Layout token={token} branch={'Algebra'} muted={muted} fileButtonRef={fileButtonRef} />}
         </div>
         <Center>{activeTab === "Sign In" && !token && <Auth setToken={setToken} muted={muted} />}</Center>
   
