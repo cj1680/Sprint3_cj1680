@@ -10,12 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install Pa11y
-        run: npm install -g pa11y
-
-      - name: Run Pa11y on staging site with --no-sandbox flag
+      - name: Install Node.js and Pa11y
         run: |
-          pa11y https://mathster3444staging.netlify.app/ --no-sandbox > pa11y-staging.txt
+          sudo apt-get update
+          sudo apt-get install -y wget
+          sudo apt-get install -y libx11-xcb1 libfontconfig1 libxcomposite1 libasound2 libnspr4
+          curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          npm install -g pa11y puppeteer
+
+      - name: Run Pa11y on staging site with Puppeteer
+        run: |
+          # Create a script to run Pa11y with Puppeteer
+          echo 'const pa11y = require("pa11y");
+          const puppeteer = require("puppeteer");
+
+          (async () => {
+            const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
+            const results = await pa11y("https://mathster3444staging.netlify.app/", { browser });
+            console.log(results);
+            await browser.close();
+          })();' > run-pa11y.js
+
+          # Run the accessibility test
+          node run-pa11y.js > pa11y-staging.txt
           cat pa11y-staging.txt
 
       - name: Upload Pa11y Report
@@ -23,5 +41,4 @@ jobs:
         with:
           name: pa11y-report
           path: pa11y-staging.txt
-
 
