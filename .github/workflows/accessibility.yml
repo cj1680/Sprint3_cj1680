@@ -1,4 +1,4 @@
-name: Accessibility Test
+name: Accessibility Test (Staging)
 
 on:
   push:
@@ -13,25 +13,16 @@ jobs:
       - name: Install Pa11y
         run: npm install -g pa11y
 
-      - name: Run Pa11y on Staging Site
+      - name: Run Pa11y on staging site with --no-sandbox flag
         run: |
-          pa11y https://mathster3444staging.netlify.app/ --chrome-flags="--no-sandbox" > pa11y-staging.txt
+          export PA11Y_CHROME_FLAGS="--no-sandbox"
+          pa11y https://mathster3444staging.netlify.app/ > pa11y-staging.txt
           cat pa11y-staging.txt
 
-      - name: Run Pa11y on Production Site
-        run: |
-          pa11y https://mathster3444staging.netlify.app/ --chrome-flags="--no-sandbox" > pa11y-production.txt
-          cat pa11y-production.txt
-
-      - name: Upload Pa11y Report 1
-        uses: actions/upload-artifact@v4
+      - name: Upload Pa11y Report
+        uses: actions/upload-artifact@v3.1.3
         with:
-          name: pa11y-report-site1
+          name: pa11y-report
           path: pa11y-staging.txt
 
-      - name: Upload Pa11y Report 2
-        uses: actions/upload-artifact@v4
-        with:
-          name: pa11y-report-site2
-          path: pa11y-production.txt
 
