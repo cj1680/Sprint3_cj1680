@@ -15,12 +15,12 @@ jobs:
 
       - name: Run Pa11y on Staging Site
         run: |
-          pa11y https://mathster3444staging.netlify.app/ > pa11y-staging.txt
+          pa11y https://mathster3444staging.netlify.app/ --chrome-flags="--no-sandbox" > pa11y-staging.txt
           cat pa11y-staging.txt
 
       - name: Run Pa11y on Production Site
         run: |
-          pa11y https://mathster3444staging.netlify.app/ > pa11y-production.txt
+          pa11y https://mathster3444staging.netlify.app/ --chrome-flags="--no-sandbox" > pa11y-production.txt
           cat pa11y-production.txt
 
       - name: Upload Pa11y Report 1
