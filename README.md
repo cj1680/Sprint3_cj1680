@@ -27,6 +27,7 @@ Mathster provides text feedback as audio output for the following subjects:
 - Geometry
 - Algebra
 
+Master allows the use of voice commands to navigate the UI
 
 ## Get Started
 
@@ -47,6 +48,14 @@ $ cd ../frontend
 $ npm install
 $ npm run dev
 ```
+## Voice Commands
+Mathster accepts the following voice commands:
+- "graph"
+- "geometry"
+- "algebra"
+- "upload (image/file)"/"(image/file) upload"
+- "(sign/log) in"
+- "mute"/"unmute"
 
 ## Documentation
 

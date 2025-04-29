@@ -45,16 +45,17 @@
 *{
   margin: 0;
   background-color: #f8edeb;
-  font-size: 20px;
+  font-size: 30px;
+  font-weight: bold;
   padding: 0;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  color: black;
+  font-family: arial,veranda,'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .tab{
   padding: 0em;
-  transition: color 100ms ease;
+  transition:100ms ease-in;
   transform: translateY(50px);
   z-index: 1;
+  color: rgba(5, 3, 19, 0.684);
   position: relative;
   outline: 3px solid rgb(3, 24, 22);
   outline-offset: -px;
@@ -62,4 +63,19 @@
 h1{
   transform: translateX(-20px);
   transform: translateY(20px);
+}
+.volume{
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 50px;
+}
+
+.button {
+  background-color: transparent;
+  outline: none;
+}
+
+.button:hover {
+  background-color: white;
+  outline: none;
 }

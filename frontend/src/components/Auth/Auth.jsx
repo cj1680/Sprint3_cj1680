@@ -10,9 +10,19 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { upperFirst, useToggle } from '@mantine/hooks';
+import { useSpeechSynthesis } from 'react-speech-kit';
+import { useEffect, useState, useRef } from 'react';
+import { Loader } from '@mantine/core';
 
-export default function Auth({props, setSignedIn}) {
+export default function Auth({props, setToken, muted}) {
   const [type, toggle] = useToggle(['login', 'register']);
+  const [loading, setLoading] = useState(false);
+  const [audioOutput, setAudioOutput] = useState('');
+  const inputRef = useRef(null);
+  const signInRef = useRef(null);
+
+  const { speak } = useSpeechSynthesis();
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -27,8 +37,21 @@ export default function Auth({props, setSignedIn}) {
     },
   });
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 50);
+  
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleSubmit = async (values) => {
     const endpoint = type === 'login' ? '/login' : '/register';
+
+    setLoading(true);
+    setAudioOutput('Loading');
 
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}/`, {
@@ -39,19 +62,38 @@ export default function Auth({props, setSignedIn}) {
 
       const data = await response.json();
       if (response.ok) {
-        alert(data.message); // Show success message
-        setSignedIn(true);
+        handleSpeak('Log in successful'); // Say success message
+        if (data.token) {
+          localStorage.setItem('mathsterToken', data.token);
+          setToken(data.token);
+        } else {
+          console.log('no token');
+        }
       } else {
-        alert(data.error); // Show error message
+        handleSpeak(`Failed to ${type}`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred. Please try again.');
+      handleSpeak('An error has occured.')
     }
+
+    setLoading(false);
   };
 
+  useEffect(() => {
+    handleSpeak(audioOutput);
+  }, [audioOutput])
+
+  const handleSpeak = (field) => {
+    if (!muted) {
+      window.speechSynthesis.cancel();
+      speak({ text: field });
+    }
+  }
+
   return (
-    <Paper radius="md" pt="40px" withBorder {...props}>
+    <Paper radius="md" pt="28px" pos='relative' withBorder {...props}>
+
       <Text size="lg" fw={500}>
         {upperFirst(type)}
       </Text>
@@ -66,6 +108,8 @@ export default function Auth({props, setSignedIn}) {
             onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
             error={form.errors.email && 'Invalid email'}
             radius="md"
+            ref={inputRef}
+            onFocus={() => handleSpeak('enter an email')}
           />
 
           <PasswordInput
@@ -76,16 +120,27 @@ export default function Auth({props, setSignedIn}) {
             onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
             error={form.errors.password && 'Password should include at least 6 characters'}
             radius="md"
+            onFocus={() => handleSpeak('enter a password. Must be at least 6 characters long')}
           />
         </Stack>
-
+        {loading && (
+          <div className="loader-overlay">
+            <Loader color="black" size="xl" />
+          </div>
+        )}
         <Group justify="space-between" mt="xl">
-          <Anchor component="button" type="button" c="dimmed" onClick={() => toggle()} size="xs">
-            {type === 'register'
-              ? 'Already have an account? Login'
-              : "Don't have an account? Register"}
+          <Anchor component="button" 
+            type="button" 
+            c="dimmed" 
+            onClick={() => {handleSpeak(type === 'register' ? "Don't have an account? Register" : 'Already have an account? Login'); toggle()}} 
+            size="xs"
+            onFocus={() => handleSpeak(type === 'register' ? 'Already have an account? Login' : "Don't have an account? Register")}
+            >
+              {type === 'register'
+                ? 'Already have an account? Login'
+                : "Don't have an account? Register"}
           </Anchor>
-          <Button type="submit" radius="xl" style={{ backgroundColor: 'black', color: 'white' }}>
+          <Button type="submit" radius="xl" style={{ backgroundColor: 'black', color: 'white' }} ref={signInRef} onFocus={() => handleSpeak(type)}>
             {upperFirst(type)}
           </Button>
         </Group>

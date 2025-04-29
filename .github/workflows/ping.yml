@@ -1,0 +1,16 @@
+name: Render Refresh
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print current UTC time
+        run: date -u
+
+      - name: Ping Render backend
+        run: curl -s ${{ secrets.RENDER_URL }}

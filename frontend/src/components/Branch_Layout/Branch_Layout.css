@@ -1,0 +1,40 @@
+.butt{
+    color: rgb(57, 39, 193);
+    transform: translateY(70px);
+}
+
+h2{
+    transform: translateY(70px);
+    font-size: 50px;
+}
+.loader-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0);
+    z-index: 1000;
+    margin-top: 70px; /* add the same offset */
+}
+.image-response-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 100px; /* Space between image and text */
+    margin-top: 150px;
+    padding: 0 100px; /* Pushes both content inward */
+}  
+.preview-image {
+    max-width: 400px;
+    height: auto;
+    object-fit: contain;
+}
+  
+.response-text {
+    max-width: 600px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+*{
+    color: rgba(5, 3, 19, 0.684);
+}
