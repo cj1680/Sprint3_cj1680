@@ -33,7 +33,7 @@ jobs:
           cat pa11y-report.txt
 
       - name: Upload Pa11y report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pa11y-report
           path: pa11y-report.txt
