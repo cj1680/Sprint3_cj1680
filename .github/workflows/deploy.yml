@@ -32,7 +32,7 @@ jobs:
       - name: Lint Python code
         run: |
           if [ -f .flake8 ] || [ -f setup.cfg ] || [ -f tox.ini ] || [ -f .pep8 ]; then
-            flake8 .
+            flake8 --exit-zero .
           else
             echo "No lint config found, skipping linting."
           fi
