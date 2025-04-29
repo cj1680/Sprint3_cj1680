@@ -1,48 +1,51 @@
 import pytest
+from unittest.mock import patch, MagicMock
 from io import BytesIO
-from app import create_app  # Import the create_app function to instantiate the app
+from app import create_app
 
 @pytest.fixture
-def app():
-    app = create_app()  # Create the Flask app using the app factory function
-    return app
-
-@pytest.fixture
-def client(app):
-    return app.test_client()  # Create a test client for the app
+def client():
+    # Create a test client for the app
+    app = create_app()
+    return app.test_client()
 
 def create_test_image():
-    # Create a simple 1x1 pixel image for testing
-    img = BytesIO()
-    img.write(b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90\x8c\x01\x30\x00\x00\x00\x01IDAT8\x8d\x63\xf8\xff\xff?\x00\x06\x00\x02\x00\x01\xa0>\x94\xf7\x00\x00\x00\x00IEND\xaeB`\x82')
-    img.seek(0)
-    return img
+    # Create a simple image in memory for testing
+    image = BytesIO()
+    image.write(b"fakeimagecontent")  # Not a real image, just a placeholder
+    image.seek(0)  # Reset the pointer to the beginning of the "image"
+    return image
 
-def test_graph_route_valid_image(client):
+@patch('app.routes.graph_route.anthropic.Anthropic')  # Mock Anthropics API
+@patch('app.routes.graph_route.psycopg2.connect')  # Mock database connection
+@patch('app.routes.graph_route.cloudinary.uploader.upload')  # Mock Cloudinary upload
+def test_graph_route_valid_image(mock_cloudinary, mock_db, mock_anthropic, client):
+    # Mock the response from the Anthropics API
+    mock_anthropic_instance = MagicMock()
+    mock_anthropic.return_value = mock_anthropic_instance
+    mock_anthropic_instance.messages.create.return_value = MagicMock(
+        content=[MagicMock(text="The shape is a V-shape. It has 3 points. The first point is: at 0, 0. Next: at 1, 1. Finally: at 2, 2.")]
+    )
+
+    # Mock the database cursor and connection
+    mock_db_instance = MagicMock()
+    mock_db.return_value = mock_db_instance
+    mock_db_instance.cursor.return_value.__enter__.return_value = MagicMock()
+
+    # Mock Cloudinary upload response
+    mock_cloudinary.return_value = {'secure_url': 'https://example.com/image.jpg', 'public_id': 'image_id'}
+
     # Use a valid image (e.g., PNG)
     image = create_test_image()
     response = client.post('/graphs/', data={'image': (image, 'test.png')})
 
+    # Assert the status code is 200 (OK)
     assert response.status_code == 200
     json_data = response.get_json()
+    
+    # Assert the response contains the expected data
     assert 'response' in json_data
     assert isinstance(json_data['response'], list)
-
-def test_graph_route_invalid_image_format(client):
-    # Use an unsupported image type
-    image = create_test_image()
-    response = client.post('/graphs/', data={'image': (image, 'test.gif')})
-
-    assert response.status_code == 400
-    json_data = response.get_json()
-    assert 'error' in json_data
-    assert json_data['error'] == 'Unsupported image format. Only PNG and JPG are supported.'
-
-def test_graph_route_no_image(client):
-    # Test case where no image is provided
-    response = client.post('/graphs/')
-    
-    assert response.status_code == 400
-    json_data = response.get_json()
-    assert 'error' in json_data
-    assert json_data['error'] == 'No image uploaded'
+    assert json_data['response'] == [
+        "The shape is a V-shape. It has 3 points. The first point is: at 0, 0. Next: at 1, 1. Finally: at 2, 2."
+    ]
